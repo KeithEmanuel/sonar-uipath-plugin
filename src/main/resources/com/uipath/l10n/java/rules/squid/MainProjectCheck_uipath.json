@@ -1,0 +1,13 @@
+{
+  "title": "Main Project Check",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "project"
+  ],
+  "defaultSeverity": "Blocker"
+}
