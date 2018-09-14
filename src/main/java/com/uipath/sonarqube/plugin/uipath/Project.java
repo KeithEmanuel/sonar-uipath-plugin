@@ -31,6 +31,8 @@ public class Project {
 
     private Project(UiPathSensor sensor, SensorContext sensorContext){
 
+        this.sensorContext = sensorContext;
+
         projectJsonInputFile = sensor.getProjectJson();
         Iterable<InputFile> inputFiles = sensor.getWorkflows();
 

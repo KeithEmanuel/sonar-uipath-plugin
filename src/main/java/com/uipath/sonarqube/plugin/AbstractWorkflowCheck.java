@@ -6,5 +6,9 @@ import org.sonar.api.rule.RuleKey;
 
 public abstract class AbstractWorkflowCheck extends AbstractCheck {
 
+    protected AbstractWorkflowCheck(){
+        super();
+    }
+
     public abstract void execute(Project project, Workflow workflow);
 }

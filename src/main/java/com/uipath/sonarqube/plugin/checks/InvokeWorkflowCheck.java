@@ -16,6 +16,10 @@ import org.sonar.check.Rule;
 )
 public class InvokeWorkflowCheck extends AbstractWorkflowCheck {
 
+    public InvokeWorkflowCheck(){
+        super();
+    }
+
     @Override
     public void execute(Project project, Workflow workflow){
 

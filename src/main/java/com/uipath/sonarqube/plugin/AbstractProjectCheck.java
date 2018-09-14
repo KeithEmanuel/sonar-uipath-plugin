@@ -6,5 +6,9 @@ import org.sonar.api.rule.RuleKey;
 
 public abstract class AbstractProjectCheck extends AbstractCheck {
 
+    protected AbstractProjectCheck(){
+        super();
+    }
+
     public abstract void execute(Project project);
 }

@@ -15,6 +15,10 @@ import org.sonar.check.Rule;
 )
 public class MainProjectCheck extends AbstractProjectCheck {
 
+    public MainProjectCheck(){
+        super();
+    }
+
     @Override
     public void execute(Project project){
 

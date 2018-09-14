@@ -53,26 +53,21 @@ public class UiPathSensor implements Sensor{
     @Override
     public void execute(SensorContext context){
 
+        LOG.info("UiPathSensor.execute is running!");
+        LOG.info("UiPathSensor has project.json? " + hasProjectJson());
+        LOG.info("UiPathSensor has workflows? " + hasWorkflows());
+
         Project project = Project.FromSensorContext(this, context);
 
-        NewIssue issue = context.newIssue().forRule(RuleKey.of(CheckRepository.REPOSITORY_KEY, "MainProjectCheck"));
-        NewIssueLocation location = issue.newLocation()
-            .on(project.getInputFile())
-            .message("It not right");
-        issue.at(location);
-        issue.save();
-
-        if(project.getWorkflows().size() > 0){
-            Workflow workflow = project.getWorkflows().get(0);
-
-            NewIssue issue2 = context.newIssue().forRule(RuleKey.of(CheckRepository.REPOSITORY_KEY, "InvokeWorkflowCheck"));
-            NewIssueLocation location2 = issue2.newLocation()
-                .on(workflow.getInputFile())
-                .message("It not right either");
-            issue2.at(location2);
-            issue2.save();
+        for(AbstractProjectCheck check : CheckRepository.getProjectChecks()){
+            check.execute(project);
         }
 
+        for(Workflow workflow : project.getWorkflows()){
+            for(AbstractWorkflowCheck check : CheckRepository.getWorkflowChecks()){
+                check.execute(project, workflow);
+            }
+        }
     }
 
     public boolean hasProjectJson(){
