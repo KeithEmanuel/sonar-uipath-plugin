@@ -2,9 +2,13 @@ package com.uipath.sonarqube.plugin;
 
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.AnnotationUtils;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
 
 public class AbstractCheck {
+
+    private static final Logger LOG = Loggers.get(AbstractCheck.class);
 
     private Rule rule;
     private RuleKey ruleKey;
@@ -28,5 +32,14 @@ public class AbstractCheck {
 
     public RuleKey getRuleKey(){
         return ruleKey;
+    }
+
+    protected void tryCatch(Runnable runnable, String exceptionMessage){
+        try{
+            runnable.run();
+        }
+        catch (Exception e){
+            LOG.error(exceptionMessage, e);
+        }
     }
 }

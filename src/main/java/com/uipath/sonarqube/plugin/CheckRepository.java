@@ -1,7 +1,8 @@
 package com.uipath.sonarqube.plugin;
 
-import com.uipath.sonarqube.plugin.checks.InvokeWorkflowCheck;
 import com.uipath.sonarqube.plugin.checks.MainProjectCheck;
+import com.uipath.sonarqube.plugin.checks.WorkflowArgumentsCheck;
+import com.uipath.sonarqube.plugin.checks.WorkflowVariablesCheck;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +21,8 @@ public class CheckRepository {
     // Add new WorkflowChecks here!
     public static List<AbstractWorkflowCheck> getWorkflowChecks(){
         return Arrays.asList(
-            new InvokeWorkflowCheck()
+            new WorkflowArgumentsCheck(),
+            new WorkflowVariablesCheck()
         );
     }
 

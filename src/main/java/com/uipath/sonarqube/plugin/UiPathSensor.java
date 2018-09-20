@@ -2,6 +2,7 @@ package com.uipath.sonarqube.plugin;
 
 import com.uipath.sonarqube.plugin.uipath.Project;
 import com.uipath.sonarqube.plugin.uipath.Workflow;
+import org.dom4j.DocumentException;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -10,10 +11,6 @@ import org.sonar.api.batch.rule.Checks;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.batch.sensor.issue.NewIssue;
-import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.measures.FileLinesContextFactory;
-import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -51,23 +48,35 @@ public class UiPathSensor implements Sensor{
     }
 
     @Override
-    public void execute(SensorContext context){
+    public void execute(SensorContext context) {
 
-        LOG.info("UiPathSensor.execute is running!");
-        LOG.info("UiPathSensor has project.json? " + hasProjectJson());
-        LOG.info("UiPathSensor has workflows? " + hasWorkflows());
+        LOG.info("UiPathSensor is executing...");
 
         Project project = Project.FromSensorContext(this, context);
 
         for(AbstractProjectCheck check : CheckRepository.getProjectChecks()){
-            check.execute(project);
+            try{
+                LOG.info(String.format("Executing check %s...", check.getRuleKeyString()));
+                check.execute(project);
+            }
+            catch (Exception e){
+                LOG.error("Error when executing check '" + check.getClass().getSimpleName() + "'", e);
+            }
         }
 
         for(Workflow workflow : project.getWorkflows()){
             for(AbstractWorkflowCheck check : CheckRepository.getWorkflowChecks()){
-                check.execute(project, workflow);
+                try{
+                    LOG.info(String.format("Executing check %s...", check.getRuleKeyString()));
+                    check.execute(project, workflow);
+                }
+                catch (Exception e){
+                    LOG.error("Error when executing check '" + check.getClass().getSimpleName() + "'", e);
+                }
             }
         }
+
+        LOG.info("UiPathSensor is done!");
     }
 
     public boolean hasProjectJson(){

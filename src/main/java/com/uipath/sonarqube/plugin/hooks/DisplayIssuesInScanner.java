@@ -9,7 +9,7 @@ import org.sonar.api.utils.log.Loggers;
 
 public class DisplayIssuesInScanner implements PostJob {
 
-    private static final Logger LOGGER = Loggers.get(DisplayIssuesInScanner.class);
+    private static final Logger LOG = Loggers.get(DisplayIssuesInScanner.class);
 
     @Override
     public void describe(PostJobDescriptor descriptor) {
@@ -27,12 +27,12 @@ public class DisplayIssuesInScanner implements PostJob {
                 Integer issueLine = issue.line();
 
                 // just to illustrate, we dump some fields of the 'issue' in sysout (bad, very bad)
-                LOGGER.info("OPEN {} : {}({})", ruleKey, issue.componentKey(), issueLine);
+                LOG.info("OPEN {} : {}({})", ruleKey, issue.componentKey(), issueLine);
             }
 
             // all resolved issues
             for (PostJobIssue issue : context.resolvedIssues()) {
-                LOGGER.info("RESOLVED {} : {}({})", issue.ruleKey(), issue.componentKey(), issue.line());
+                LOG.info("RESOLVED {} : {}({})", issue.ruleKey(), issue.componentKey(), issue.line());
             }
         }
     }

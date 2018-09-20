@@ -22,6 +22,10 @@ public class MainProjectCheck extends AbstractProjectCheck {
     @Override
     public void execute(Project project){
 
-        project.reportIssue(getRuleKey(), "There is some issue here...");
+        String mainPath = project.getProjectJson().main;
+
+        if(!project.getSensorContext().fileSystem().resolvePath(mainPath).exists()){
+            project.reportIssue(getRuleKey(), "Main workflow '" + mainPath + "' does not exist!");
+        }
     }
 }
