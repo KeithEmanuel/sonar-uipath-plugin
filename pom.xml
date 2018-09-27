@@ -82,7 +82,7 @@
           <!-- the entry-point class that extends org.sonar.api.SonarPlugin -->
           <pluginKey>sonar-uipath-plugin</pluginKey>
           <pluginName>UiPath Plugin</pluginName>
-          <pluginClass>com.uipath.sonarqube.plugin.UiPathPlugin</pluginClass>
+          <pluginClass>com.uipath.sonar.plugin.UiPathPlugin</pluginClass>
           <pluginDescription>The SonarQube plugin for inspecting UiPath plugins.</pluginDescription>
           <!-- advanced properties can be set here. See paragraph "Advanced Build Properties". -->
         </configuration>
@@ -94,7 +94,7 @@
         <extensions>true</extensions>
         <configuration>
           <pluginKey>uipath</pluginKey>
-          <pluginClass>com.uipath.sonarqube.plugin.UiPathPlugin</pluginClass>
+          <pluginClass>com.uipath.sonar.plugin.UiPathPlugin</pluginClass>
         </configuration>
       </plugin>
       <plugin>

@@ -1,31 +1,32 @@
-package com.uipath.sonarqube.plugin.uipath;
+package com.uipath.sonar.plugin.uipath;
 
 import com.google.gson.Gson;
-import com.uipath.sonarqube.plugin.UiPathSensor;
+import com.uipath.sonar.plugin.UiPathSensor;
 import org.dom4j.DocumentException;
-import org.sonar.api.batch.fs.FilePredicate;
-import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 
-import javax.swing.text.Document;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.Files;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.stream.Stream;
 
+/**
+ * Project represents a UiPath project, built from a project.json file.
+ *
+ * It contains a List of Workflow objects that belong to the project.
+ * Issues must be created on a SensorContext and reported on InputFile objects. This class wraps an InputFile
+ * for project.json. Any calls to reportIssue will be created on the project.json file.
+ */
 public class Project {
 
     private static final String screenshotsFolderName = ".screenshots";
@@ -35,8 +36,6 @@ public class Project {
     private InputFile projectJsonInputFile;
     private ProjectJson projectJson;
     private List<Workflow> workflows = new ArrayList<>();
-    private List<Issue> issues = new ArrayList<>();
-
     private Gson gson = new Gson();
 
     private Project(UiPathSensor sensor, SensorContext sensorContext) throws IOException, DocumentException{

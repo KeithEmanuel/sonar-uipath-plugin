@@ -1,8 +1,7 @@
-package com.uipath.sonarqube.plugin;
+package com.uipath.sonar.plugin;
 
-import com.uipath.sonarqube.plugin.uipath.Project;
-import com.uipath.sonarqube.plugin.uipath.Workflow;
-import org.dom4j.DocumentException;
+import com.uipath.sonar.plugin.uipath.Workflow;
+import com.uipath.sonar.plugin.uipath.Project;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -15,6 +14,10 @@ import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
+/**
+ * UiPathSensor is the main component for scanning UiPath projects. The sensor identifies the files to analyze
+ * and executes the checks.
+ */
 public class UiPathSensor implements Sensor{
 
     private static final Logger LOG = Loggers.get(UiPathSensor.class);

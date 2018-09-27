@@ -1,6 +1,6 @@
-package com.uipath.sonarqube.plugin.languages;
+package com.uipath.sonar.plugin.languages;
 
-import com.uipath.sonarqube.plugin.UiPathPlugin;
+import com.uipath.sonar.plugin.UiPathPlugin;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.resources.AbstractLanguage;
@@ -8,6 +8,10 @@ import org.sonar.api.resources.AbstractLanguage;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * UiPathLanguage defines "UiPath" as a language in SonarQube, so that rules can be created on the language.
+ * This class doesn't do much other than that.
+ */
 public class UiPathLanguage extends AbstractLanguage {
     private static final String[] DEFAULT_SUFFIXES = {".json", ".xaml"};
 

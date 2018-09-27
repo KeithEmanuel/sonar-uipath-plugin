@@ -1,10 +1,10 @@
-package com.uipath.sonarqube.plugin.checks;
+package com.uipath.sonar.plugin.checks;
 
-import com.uipath.sonarqube.plugin.AbstractWorkflowCheck;
-import com.uipath.sonarqube.plugin.uipath.Project;
-import com.uipath.sonarqube.plugin.uipath.Workflow;
-import com.uipath.sonarqube.plugin.uipath.WorkflowArgument;
-import com.uipath.sonarqube.plugin.uipath.WorkflowArgument.Direction;
+import com.uipath.sonar.plugin.AbstractWorkflowCheck;
+import com.uipath.sonar.plugin.uipath.Project;
+import com.uipath.sonar.plugin.uipath.Workflow;
+import com.uipath.sonar.plugin.uipath.WorkflowArgument;
+import com.uipath.sonar.plugin.uipath.WorkflowArgument.Direction;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Priority;
@@ -61,7 +61,7 @@ public class WorkflowArgumentsCheck extends AbstractWorkflowCheck {
                     reportIssue(workflow, arg);
                 }
             }
-            else if(Character.isLowerCase(arg.getName().charAt(0))){
+            else {
                 reportIssue(workflow, arg);
             }
         }

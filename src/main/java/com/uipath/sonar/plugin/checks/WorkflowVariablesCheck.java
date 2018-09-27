@@ -1,14 +1,20 @@
-package com.uipath.sonarqube.plugin.checks;
+package com.uipath.sonar.plugin.checks;
 
-import com.uipath.sonarqube.plugin.AbstractWorkflowCheck;
-import com.uipath.sonarqube.plugin.uipath.Project;
-import com.uipath.sonarqube.plugin.uipath.Workflow;
+import com.uipath.sonar.plugin.AbstractWorkflowCheck;
+import com.uipath.sonar.plugin.uipath.Workflow;
+import com.uipath.sonar.plugin.uipath.Project;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
 import java.util.List;
+
+/**
+ * WorkflowVariablesCheck verifies that variables in a workflow follow naming conventions.
+ *
+ * TODO: Determine naming convention and implement.
+ */
 
 @Rule(
     key = "WorkflowVariablesCheck",

@@ -1,4 +1,4 @@
-package com.uipath.sonarqube.plugin.hooks;
+package com.uipath.sonar.plugin.hooks;
 
 import org.sonar.api.batch.postjob.PostJob;
 import org.sonar.api.batch.postjob.PostJobContext;
@@ -7,6 +7,9 @@ import org.sonar.api.batch.postjob.issue.PostJobIssue;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
+/**
+ * This is a sample hook that displays issues in the scanner.
+ */
 public class DisplayIssuesInScanner implements PostJob {
 
     private static final Logger LOG = Loggers.get(DisplayIssuesInScanner.class);

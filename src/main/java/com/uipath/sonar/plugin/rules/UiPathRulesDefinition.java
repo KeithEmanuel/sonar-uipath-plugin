@@ -1,8 +1,8 @@
-package com.uipath.sonarqube.plugin.rules;
+package com.uipath.sonar.plugin.rules;
 
 import com.google.gson.Gson;
-import com.uipath.sonarqube.plugin.CheckRepository;
-import com.uipath.sonarqube.plugin.languages.UiPathLanguage;
+import com.uipath.sonar.plugin.CheckRepository;
+import com.uipath.sonar.plugin.languages.UiPathLanguage;
 import org.apache.commons.lang.StringUtils;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
@@ -21,6 +21,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * UiPathRulesDefinition loads the rules to a NewRepository.
+ */
 public class UiPathRulesDefinition implements RulesDefinition {
 
     private static final String RESOURCE_BASE_PATH = "/com/uipath/l10n/java/rules/squid";

@@ -1,7 +1,7 @@
-package com.uipath.sonarqube.plugin.checks;
+package com.uipath.sonar.plugin.checks;
 
-import com.uipath.sonarqube.plugin.AbstractProjectCheck;
-import com.uipath.sonarqube.plugin.uipath.Project;
+import com.uipath.sonar.plugin.uipath.Project;
+import com.uipath.sonar.plugin.AbstractProjectCheck;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 

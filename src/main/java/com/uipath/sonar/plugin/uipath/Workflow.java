@@ -1,4 +1,4 @@
-package com.uipath.sonarqube.plugin.uipath;
+package com.uipath.sonar.plugin.uipath;
 
 import java.net.URI;
 import org.dom4j.Document;
@@ -12,9 +12,16 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.apache.commons.io.FilenameUtils;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Workflow represents a XAML workflow file.
+ * This class wraps an InputFile object, which represents the underlying XAML file. Issues created using reportIssue
+ * will be created on this underlying inputFile.
+ *
+ * This getXamlDocument method provides a DOM representation of the underlying XAML file. It uses the dom4j library.
+ * Refer to dom4j documentation for usage. Most use cases should be easily fulfilled by a simple XPATH query.
+ */
 public class Workflow {
 
     private static final Logger LOG = Loggers.get(Workflow.class);

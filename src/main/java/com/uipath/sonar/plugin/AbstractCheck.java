@@ -1,4 +1,4 @@
-package com.uipath.sonarqube.plugin;
+package com.uipath.sonar.plugin;
 
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.AnnotationUtils;
@@ -6,6 +6,10 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
 
+/**
+ * AbstractCheck is the base class for AbstractProjectCheck and AbstractWorkflowCheck.
+ * Be sure to call super() in any derived classes to initialize the Rule metadata.
+ */
 public class AbstractCheck {
 
     private static final Logger LOG = Loggers.get(AbstractCheck.class);
@@ -32,14 +36,5 @@ public class AbstractCheck {
 
     public RuleKey getRuleKey(){
         return ruleKey;
-    }
-
-    protected void tryCatch(Runnable runnable, String exceptionMessage){
-        try{
-            runnable.run();
-        }
-        catch (Exception e){
-            LOG.error(exceptionMessage, e);
-        }
     }
 }

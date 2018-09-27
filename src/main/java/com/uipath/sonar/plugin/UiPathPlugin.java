@@ -1,11 +1,15 @@
-package com.uipath.sonarqube.plugin;
+package com.uipath.sonar.plugin;
 
-import com.uipath.sonarqube.plugin.hooks.DisplayIssuesInScanner;
-import com.uipath.sonarqube.plugin.languages.UiPathLanguage;
-import com.uipath.sonarqube.plugin.languages.UiPathQualityProfile;
-import com.uipath.sonarqube.plugin.rules.UiPathRulesDefinition;
+import com.uipath.sonar.plugin.hooks.DisplayIssuesInScanner;
+import com.uipath.sonar.plugin.languages.UiPathLanguage;
+import com.uipath.sonar.plugin.languages.UiPathQualityProfile;
+import com.uipath.sonar.plugin.rules.UiPathRulesDefinition;
 import org.sonar.api.Plugin;
 
+/**
+ * UiPathPlugin simply defines what classes are used for this plugin.
+ * UiPathSensor is the main entry point for scanning UiPath projects.
+ */
 public class UiPathPlugin implements Plugin {
 
     public static final String FILE_SUFFIXES_KEY = "sonar.UiPath.file.suffixes";

@@ -1,14 +1,16 @@
-package com.uipath.sonarqube.plugin;
+package com.uipath.sonar.plugin;
 
-import com.uipath.sonarqube.plugin.checks.MainProjectCheck;
-import com.uipath.sonarqube.plugin.checks.WorkflowArgumentsCheck;
-import com.uipath.sonarqube.plugin.checks.WorkflowVariablesCheck;
+import com.uipath.sonar.plugin.checks.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * CheckRepository defines all available checks. After you create a check class, be sure to add your check
+ * to the appropriate function below!
+ */
 public class CheckRepository {
 
     public static final String REPOSITORY_KEY = "uipath";
@@ -21,6 +23,9 @@ public class CheckRepository {
     // Add new WorkflowChecks here!
     public static List<AbstractWorkflowCheck> getWorkflowChecks(){
         return Arrays.asList(
+            new InvokeWorkflowFileArgumentCheck(),
+            new InvokeWorkflowFileExistsCheck(),
+            new InvokeWorkflowFilePathCheck(),
             new WorkflowArgumentsCheck(),
             new WorkflowVariablesCheck()
         );

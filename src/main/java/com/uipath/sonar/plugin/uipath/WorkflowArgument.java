@@ -1,4 +1,4 @@
-package com.uipath.sonarqube.plugin.uipath;
+package com.uipath.sonar.plugin.uipath;
 
 import com.google.common.base.Splitter;
 import org.dom4j.Element;
@@ -10,6 +10,9 @@ import org.sonar.api.utils.log.Loggers;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * WorkflowArgument represents an argument belonging to a workflow.
+ */
 public class WorkflowArgument {
 
     private static final Logger LOG = Loggers.get(WorkflowArgument.class);
