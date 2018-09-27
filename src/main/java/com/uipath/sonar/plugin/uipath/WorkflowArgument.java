@@ -43,10 +43,10 @@ public class WorkflowArgument {
         for(Node node : nodes){
             Element element = (Element)node;
             String elementName = element.getName();
-            String name = element.attributeValue("Name");
+            String argName = element.attributeValue("Name");
             String rawType = element.attributeValue("Type");
 
-            LOG.debug(elementName +".Name = " + name);
+            LOG.debug(elementName +".Name = " + argName);
             LOG.debug(elementName +".Type = " + rawType);
 
             List<String> split = Splitter.onPattern("(\\(|\\)|:)")
@@ -76,7 +76,7 @@ public class WorkflowArgument {
                 : null;
 
             if(direction != null){
-                args.add(new WorkflowArgument(name, direction, namespace, typeNamespace, argType));
+                args.add(new WorkflowArgument(argName, direction, namespace, typeNamespace, argType));
             }
         }
 
