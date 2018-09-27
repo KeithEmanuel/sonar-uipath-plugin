@@ -1,12 +1,11 @@
-SonarQube PlugIn for analysis of UiPath projects.
-==========
+# [SonarQube](https://www.sonarqube.org/) plugin for the analysis of [UiPath Projects](https://www.uipath.com/).
 
-Prerequisites
--------------
+Automatically analyze your project for errors, bugs, and best practices.
+**This plugin is currently in Alpha!**
 
-* SonarQube
+## Documentation
+The documentation for this plugin can be found [here](https://keithemanuel.github.io/sonar-uipath-plugin/).
 
-Adding Rules/Checks
--------------------
+### License
 
-* TODO
+[GPU GPL V3](https://www.gnu.org/licenses/gpl-3.0.en.html)
