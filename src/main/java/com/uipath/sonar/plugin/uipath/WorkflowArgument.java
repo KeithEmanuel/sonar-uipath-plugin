@@ -132,6 +132,13 @@ public class WorkflowArgument {
     }
 
     public boolean matches(String name, String typeWithNamespacePrefix, Direction direction){
+
+        LOG.info("name: " + name);
+        LOG.info("typewithname: " + typeWithNamespacePrefix);
+        LOG.info("direction: " + direction);
+        LOG.info("xmlnamespacedtype: " + getXmlNamespacedType());
+        LOG.info("getdirection: " + getDirection());
+
         return
             name.equals(getName())
             && typeWithNamespacePrefix.equals(getXmlNamespacedType())

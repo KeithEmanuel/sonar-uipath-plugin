@@ -6,9 +6,12 @@ import com.uipath.sonar.plugin.uipath.Workflow;
 import com.uipath.sonar.plugin.uipath.WorkflowArgument;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Rule(
@@ -21,16 +24,22 @@ import java.util.List;
 )
 public class InvokeWorkflowFileArgumentCheck extends AbstractWorkflowCheck {
 
+    private static final Logger LOG = Loggers.get(WorkflowArgumentsCheck.class);
+
+    private static final List<String> ARG_ELEMENT_NAMES = Arrays.asList( "InArgument", "OutArgument", "InOutArgument" );
+
+    // TODO: THIS CHECK IS NOT COMPLETE
+
     public InvokeWorkflowFileArgumentCheck(){
         super();
     }
-
-    // TODO! This is not complete
 
     @Override
     public void execute(Project project, Workflow workflow){
 
         List<Node> nodes = workflow.getXamlDocument().selectNodes("//ui:InvokeWorkflowFile");
+
+        LOG.info("number of nodes: " + nodes.size());
 
         for(Node node : nodes) {
             Element element = (Element) node;
@@ -38,23 +47,33 @@ public class InvokeWorkflowFileArgumentCheck extends AbstractWorkflowCheck {
 
             Workflow invokedWorkflow = project.getWorkflowWithPath(workflowFileName).orElse(null);
 
-            for(Element descendant : element.elements()){
+            LOG.info("Invoked workflow: " + (invokedWorkflow == null ? "NULL" : invokedWorkflow.toString()));
 
-                String name = descendant.attributeValue("x:Key");
-                String type = descendant.attributeValue("x:TypeArguments");
+            if(invokedWorkflow != null){
 
-                WorkflowArgument.Direction direction =
-                    descendant.getName() == "InArgument" ? WorkflowArgument.Direction.In
-                        : descendant.getName() == "OutArgument" ? WorkflowArgument.Direction.Out
-                        : WorkflowArgument.Direction.InOut;
+                for(Element descendant : element.elements()){
 
-                boolean hasMatch = invokedWorkflow.getArguments().stream().anyMatch(a -> a.matches(name, type, direction));
+                    if(ARG_ELEMENT_NAMES.contains(element.getName())){
 
-                if(!hasMatch){
-                    String displayName = element.attributeValue("DisplayName");
+                        String name = descendant.attributeValue("x:Key");
+                        String type = descendant.attributeValue("x:TypeArguments");
 
-                    workflow.reportIssue(getRuleKey(), "Invalid Invocation of '" + workflowFileName
-                        + "' in activity '" + displayName + "'. Supplied argument '" + name + "' does not exist.");
+                        LOG.info("name: " + name + " || type: " + type);
+
+                        WorkflowArgument.Direction direction =
+                            descendant.getName().equals("InArgument") ? WorkflowArgument.Direction.In
+                                : descendant.getName().equals("OutArgument") ? WorkflowArgument.Direction.Out
+                                : WorkflowArgument.Direction.InOut;
+
+                        boolean hasMatch = invokedWorkflow.getArguments().stream().anyMatch(a -> a.matches(name, type, direction));
+
+                        if(!hasMatch){
+                            String displayName = element.attributeValue("DisplayName");
+
+                            workflow.reportIssue(getRuleKey(), "Invalid Invocation of '" + workflowFileName
+                                + "' in activity '" + displayName + "'. Supplied argument '" + name + "' does not exist.");
+                        }
+                    }
                 }
             }
         }

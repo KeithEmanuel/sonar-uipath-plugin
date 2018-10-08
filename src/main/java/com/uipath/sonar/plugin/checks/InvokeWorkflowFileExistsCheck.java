@@ -5,6 +5,8 @@ import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
@@ -20,11 +22,11 @@ import java.util.List;
 )
 public class InvokeWorkflowFileExistsCheck extends AbstractWorkflowCheck {
 
+    private static final Logger LOG = Loggers.get(WorkflowArgumentsCheck.class);
+
     public InvokeWorkflowFileExistsCheck(){
         super();
     }
-
-    // TODO! This is not complete
 
     @Override
     public void execute(Project project, Workflow workflow){

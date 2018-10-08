@@ -26,8 +26,6 @@ public class InvokeWorkflowFilePathCheck extends AbstractWorkflowCheck {
         super();
     }
 
-    // TODO! This is not complete
-
     @Override
     public void execute(Project project, Workflow workflow){
 
