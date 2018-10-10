@@ -1,5 +1,6 @@
 package com.uipath.sonar.plugin.checks;
 
+import com.uipath.sonar.plugin.uipath.Utils;
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
 import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.uipath.Workflow;
@@ -19,7 +20,7 @@ import java.util.List;
     name = "Invoke Workflow File Argument Check",
     description =  "Verifies that the arguments of Invoke Workflow activities are valid.",
     status = "BETA",
-    priority = Priority.BLOCKER,
+    priority = Priority.CRITICAL,
     tags = {"activity"}
 )
 public class InvokeWorkflowFileArgumentCheck extends AbstractWorkflowCheck {
@@ -27,8 +28,6 @@ public class InvokeWorkflowFileArgumentCheck extends AbstractWorkflowCheck {
     private static final Logger LOG = Loggers.get(WorkflowArgumentsCheck.class);
 
     private static final List<String> ARG_ELEMENT_NAMES = Arrays.asList( "InArgument", "OutArgument", "InOutArgument" );
-
-    // TODO: THIS CHECK IS NOT COMPLETE
 
     public InvokeWorkflowFileArgumentCheck(){
         super();
@@ -39,26 +38,28 @@ public class InvokeWorkflowFileArgumentCheck extends AbstractWorkflowCheck {
 
         List<Node> nodes = workflow.getXamlDocument().selectNodes("//ui:InvokeWorkflowFile");
 
-        LOG.info("number of nodes: " + nodes.size());
-
         for(Node node : nodes) {
             Element element = (Element) node;
-            String workflowFileName = element.attributeValue("WorkflowFileName");
+            String workflowFilename = element.attributeValue("WorkflowFileName");
 
-            Workflow invokedWorkflow = project.getWorkflowWithPath(workflowFileName).orElse(null);
+            if(Utils.nodeIsCode(workflowFilename)){
+                break;  // This is code, not a literal string.
+            }
 
-            LOG.info("Invoked workflow: " + (invokedWorkflow == null ? "NULL" : invokedWorkflow.toString()));
+            Workflow invokedWorkflow = project.getWorkflowWithPath(workflowFilename).orElse(null);
 
             if(invokedWorkflow != null){
 
-                for(Element descendant : element.elements()){
+                List<Node> descendantNodes = element.selectNodes("ui:InvokeWorkflowFile.Arguments/*");
 
-                    if(ARG_ELEMENT_NAMES.contains(element.getName())){
+                for(Node descendantNode : descendantNodes){
 
-                        String name = descendant.attributeValue("x:Key");
-                        String type = descendant.attributeValue("x:TypeArguments");
+                    Element descendant = (Element)descendantNode;
 
-                        LOG.info("name: " + name + " || type: " + type);
+                    if(ARG_ELEMENT_NAMES.contains(descendant.getName())){
+
+                        String name = descendant.attributeValue("Key");
+                        String type = descendant.attributeValue("TypeArguments");
 
                         WorkflowArgument.Direction direction =
                             descendant.getName().equals("InArgument") ? WorkflowArgument.Direction.In
@@ -70,7 +71,7 @@ public class InvokeWorkflowFileArgumentCheck extends AbstractWorkflowCheck {
                         if(!hasMatch){
                             String displayName = element.attributeValue("DisplayName");
 
-                            workflow.reportIssue(getRuleKey(), "Invalid Invocation of '" + workflowFileName
+                            workflow.reportIssue(getRuleKey(), "Invalid Invocation of '" + workflowFilename
                                 + "' in activity '" + displayName + "'. Supplied argument '" + name + "' does not exist.");
                         }
                     }

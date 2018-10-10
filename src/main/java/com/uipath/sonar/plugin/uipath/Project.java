@@ -6,7 +6,6 @@ import com.uipath.sonar.plugin.checks.WorkflowArgumentsCheck;
 import org.dom4j.DocumentException;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
@@ -16,7 +15,6 @@ import org.sonar.api.utils.log.Loggers;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -53,7 +51,7 @@ public class Project {
     public static Project FromSensorContext(UiPathSensor sensor, SensorContext sensorContext){
 
         if(!sensor.hasProjectJson() || !sensor.hasWorkflows()){
-            throw new UnsupportedOperationException("Not a valid project!");  // Todo, make exception class
+            throw new UnsupportedOperationException("Not a valid project!");
         }
 
         try{
@@ -89,7 +87,7 @@ public class Project {
     }
 
     public boolean doesScreenshotExists(String screenshotId){
-
+        // THIS IS UNTESTED
         File file = new File(Paths.get(getScreenshotsPath().toString(), screenshotId + ".png").toUri());
         return file.exists() && !file.isDirectory();
     }
@@ -100,26 +98,21 @@ public class Project {
 
     public Optional<Workflow> getWorkflowWithPath(String path){
 
-        try {
-            URI uri = new URI(path);
-            if(!uri.isAbsolute()){
-                uri = getInputFile().uri().resolve(uri);
-            }
+        URI uri = Utils.getURI(path);
 
-            return getWorkflowWithPath(uri);
+        if(!uri.isAbsolute()){
+            uri = getInputFile().uri().resolve(uri);
         }
-        catch (URISyntaxException e){
-            throw new RuntimeException("Exception encountered when parsing the URI string with value '" + path + "'", e);
-        }
+
+        return getWorkflowWithPath(uri);
     }
 
     public Optional<Workflow> getWorkflowWithPath(URI uri){
 
         for(Workflow workflow : workflows){
 
-            LOG.info(uri + " == " + workflow.getUri());
-
             if(workflow.getUri().equals(uri)){
+
                 return Optional.of(workflow);
             }
         }

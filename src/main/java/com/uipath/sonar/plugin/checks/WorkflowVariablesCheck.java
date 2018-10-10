@@ -40,7 +40,7 @@ public class WorkflowVariablesCheck extends AbstractWorkflowCheck {
 
            String name = element.attributeValue("Name");
 
-           // TODO: Figure out naming convention
+           // TODO: determine naming convention
         }
     }
 }

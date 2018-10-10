@@ -2,6 +2,7 @@ package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
 import com.uipath.sonar.plugin.uipath.Project;
+import com.uipath.sonar.plugin.uipath.Utils;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import org.dom4j.Element;
 import org.dom4j.Node;
@@ -33,15 +34,10 @@ public class InvokeWorkflowFilePathCheck extends AbstractWorkflowCheck {
 
         for(Node node : nodes) {
             Element element = (Element) node;
-            String workflowFileName = element.attributeValue("WorkflowFileName");
+            String workflowFilename = element.attributeValue("WorkflowFileName");
 
-            try{
-                if(new URI(workflowFileName).isAbsolute()){
-                    workflow.reportIssue(getRuleKey(), "The path the workflow file should be relative and contained in the project.");
-                }
-            }
-            catch (URISyntaxException e){
-                throw new RuntimeException("Error parsing URI.", e);
+            if(Utils.nodeIsPlainText(workflowFilename) && Utils.getURI(workflowFilename).isAbsolute()){
+                workflow.reportIssue(getRuleKey(), "The path the workflow file should be relative and contained in the project.");
             }
         }
     }

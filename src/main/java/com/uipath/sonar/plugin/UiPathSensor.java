@@ -53,33 +53,38 @@ public class UiPathSensor implements Sensor{
     @Override
     public void execute(SensorContext context) {
 
-        LOG.info("UiPathSensor is executing...");
+        LOG.info("UiPathSensor is running...");
 
         Project project = Project.FromSensorContext(this, context);
 
+        LOG.info("Project: " + project.getInputFile().uri().toString());
+
         for(AbstractProjectCheck check : CheckRepository.getProjectChecks()){
             try{
-                LOG.info(String.format("Executing check %s...", check.getRuleKeyString()));
+                LOG.info(String.format("Executing check %s...", check.getRule().name()));
                 check.execute(project);
             }
             catch (Exception e){
-                LOG.error("Error when executing check '" + check.getClass().getSimpleName() + "'", e);
+                LOG.error("Error when executing check '" + check.getRule().name() + "'", e);
             }
         }
 
         for(Workflow workflow : project.getWorkflows()){
+
+            LOG.info("Checking workflow: " + workflow.getName());
+
             for(AbstractWorkflowCheck check : CheckRepository.getWorkflowChecks()){
                 try{
-                    LOG.info(String.format("Executing check %s...", check.getRuleKeyString()));
+                    LOG.info(String.format("Executing check %s...", check.getRule().name()));
                     check.execute(project, workflow);
                 }
                 catch (Exception e){
-                    LOG.error("Error when executing check '" + check.getClass().getSimpleName() + "'", e);
+                    LOG.error("Error when executing check '" + check.getRule().name() + "'", e);
                 }
             }
         }
 
-        LOG.info("UiPathSensor is done!");
+        LOG.info("UiPathSensor finished!");
     }
 
     public boolean hasProjectJson(){

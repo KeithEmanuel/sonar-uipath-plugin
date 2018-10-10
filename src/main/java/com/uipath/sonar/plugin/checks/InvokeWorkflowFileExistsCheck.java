@@ -2,6 +2,7 @@ package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
 import com.uipath.sonar.plugin.uipath.Project;
+import com.uipath.sonar.plugin.uipath.Utils;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import org.dom4j.Element;
 import org.dom4j.Node;
@@ -35,14 +36,18 @@ public class InvokeWorkflowFileExistsCheck extends AbstractWorkflowCheck {
 
         for(Node node : nodes) {
             Element element = (Element) node;
-            String workflowFileName = element.attributeValue("WorkflowFileName");
+            String workflowFilename = element.attributeValue("WorkflowFileName");
+
+            if(Utils.nodeIsCode(workflowFilename)){
+                break;  // This is code, not a literal string.
+            }
 
             boolean workflowExists = project.getWorkflowWithPath(element.attributeValue("WorkflowFileName")).isPresent();
 
             if(!workflowExists){
                 String displayName = element.attributeValue("DisplayName");
 
-                workflow.reportIssue(getRuleKey(), "Invoked workflow '" + workflowFileName + "' for activity '" + displayName +"' does not exist.");
+                workflow.reportIssue(getRuleKey(), "Invoked workflow '" + workflowFilename + "' for activity '" + displayName +"' does not exist.");
             }
         }
     }

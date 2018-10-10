@@ -34,8 +34,6 @@ public class WorkflowArgumentsCheck extends AbstractWorkflowCheck {
     public void execute(Project project, Workflow workflow) {
         for(WorkflowArgument arg : workflow.getArguments()) {
 
-            LOG.info("Inspecting argument " + arg + "...");
-
             if(arg.getDirection() == Direction.In){
 
                 if(!arg.getName().startsWith(IN_PREFIX)){

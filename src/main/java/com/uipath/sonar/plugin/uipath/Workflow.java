@@ -86,4 +86,9 @@ public class Workflow {
 
         issue.save();
     }
+
+    @Override
+    public String toString(){
+        return getName();
+    }
 }

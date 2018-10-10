@@ -1,14 +1,15 @@
 package com.uipath.sonar.plugin.uipath;
 
-import com.google.common.base.Splitter;
 import org.dom4j.Element;
-import org.dom4j.Namespace;
 import org.dom4j.Node;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * WorkflowArgument represents an argument belonging to a workflow.
@@ -19,18 +20,18 @@ public class WorkflowArgument {
 
     public enum Direction { In, Out, InOut, }
 
+    private String rawXml;
     private String name;
     private Direction direction;
-    public String typeNamespace;
-    private String type;
-    private Namespace xmlNamespace;
+    private String rawType;
+    private String rawArgType;
 
-    public WorkflowArgument(String name, Direction direction, Namespace namespace, String typeNamespace, String type){
+    public WorkflowArgument(String rawXml, String name, String rawType, String rawArgType, Direction direction){
+        this.rawXml = rawXml;
         this.name = name;
+        this.rawType = rawType;
+        this.rawArgType = rawArgType;
         this.direction = direction;
-        this.typeNamespace = typeNamespace;
-        this.type = type;
-        this.xmlNamespace = namespace;
     }
 
     public static List<WorkflowArgument> LoadFromWorkflow(Workflow workflow){
@@ -38,78 +39,55 @@ public class WorkflowArgument {
 
         List<Node> nodes = workflow.getXamlDocument().selectNodes("/Activity/x:Members/x:Property");
 
-        LOG.info(String.format("In file '%s'. %s arguments detected.", workflow.getName(), nodes.size()));
-
         for(Node node : nodes){
             Element element = (Element)node;
-            String elementName = element.getName();
-            String argName = element.attributeValue("Name");
-            String rawType = element.attributeValue("Type");
 
-            LOG.debug(elementName +".Name = " + argName);
-            LOG.debug(elementName +".Type = " + rawType);
-
-            List<String> split = Splitter.onPattern("(\\(|\\)|:)")
-                .trimResults()
-                .omitEmptyStrings()
-                .splitToList(rawType);
-
-            String argDirection = split.get(0);
-            //String argTypeNamespace = split.get(1);
-            String argType = split.get(2);
-
-            Namespace namespace = element.getNamespace();
-            String ns = namespace.getText();
-            String typeNamespace = "";
-
-            if(ns.startsWith("clr-namespace:")){
-                typeNamespace = Splitter.onPattern("(:|;)")
-                    .trimResults()
-                    .omitEmptyStrings()
-                    .splitToList(ns)
-                    .get(1);
-            }
-
-            Direction direction = argDirection.equals("InArgument") ? Direction.In
-                : argDirection.equals("OutArgument") ? Direction.Out
-                : argDirection.equals("InOutArgument") ? Direction.InOut
-                : null;
-
-            if(direction != null){
-                args.add(new WorkflowArgument(argName, direction, namespace, typeNamespace, argType));
-            }
+            Optional<WorkflowArgument> arg = FromElement(element);
+            arg.ifPresent(args::add);
         }
 
         return args;
+    }
+
+    public static Optional<WorkflowArgument> FromElement(Element element){
+        try{
+            String rawXml = element.asXML();
+            String name = element.attributeValue("Name");
+            String rawType = element.attributeValue("Type");
+
+            Pattern pattern = Pattern.compile("^(?<direction>In|Out|InOut)Argument\\((?<type>.+)\\)$", Pattern.MULTILINE);
+            Matcher matcher = pattern.matcher(rawType);
+
+            if (matcher.find()) {
+                System.out.println("Full match: " + matcher.group(0));
+                String rawArgType = matcher.group("type");
+                Direction direction = Direction.valueOf(matcher.group("direction"));
+
+                return Optional.of(new WorkflowArgument(rawXml, name, rawType, rawArgType, direction));
+            }
+
+            return Optional.empty();
+        }
+        catch(Exception e){
+            LOG.error("Could not parse WorkflowArgument. RawXML: " + element.asXML(), e);
+            return Optional.empty();
+        }
+    }
+
+    public String getRawXml(){
+        return rawXml;
     }
 
     public String getName(){
         return name;
     }
 
-    public String getType() {
-
-        if(!getTypeNamespace().isEmpty()){
-            return getTypeNamespace() + "." + getTypeWithoutNamespace();
-        }
-
-        return getTypeWithoutNamespace();
+    public String getRawType(){
+        return rawType;
     }
 
-    public String getTypeNamespace(){
-        return typeNamespace;
-    }
-
-    public String getTypeWithoutNamespace(){
-        return type;
-    }
-
-    public String getNamespacePrefix(){
-        return xmlNamespace.getPrefix();
-    }
-
-    public String getXmlNamespacedType(){
-        return xmlNamespace.getPrefix() + ":" + type;
+    public String getArgType(){
+        return rawArgType;
     }
 
     public Direction getDirection(){
@@ -123,25 +101,19 @@ public class WorkflowArgument {
         return
             other.getName().equals(getName())
             && other.getDirection().equals(getDirection())
-            && other.getType().equals(getType());
+            && other.getRawType().equals(getRawType());
     }
 
     @Override
     public String toString(){
-        return String.format("{ name: %s, direction: %s, type: %s }", getName(), getDirection(), getType());
+        return String.format("{ name: %s, direction: %s, type: %s }", getName(), getDirection(), getRawType());
     }
 
-    public boolean matches(String name, String typeWithNamespacePrefix, Direction direction){
-
-        LOG.info("name: " + name);
-        LOG.info("typewithname: " + typeWithNamespacePrefix);
-        LOG.info("direction: " + direction);
-        LOG.info("xmlnamespacedtype: " + getXmlNamespacedType());
-        LOG.info("getdirection: " + getDirection());
+    public boolean matches(String name, String rawArgType, Direction direction){
 
         return
             name.equals(getName())
-            && typeWithNamespacePrefix.equals(getXmlNamespacedType())
+            && rawArgType.equals(getArgType())
             && direction == getDirection();
     }
 }
