@@ -9,14 +9,13 @@ import org.dom4j.Node;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
-import javax.print.URIException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
 @Rule(
     key = "InvokeWorkflowFilePathCheck",
-    name = "Invoke Workflow File Path Check",
+    name = "Check 'Invoke Workflow File' path is relative",
     description =  "Checks that the path of an invoked workflow is relative and contained in the project directory.",
     status = "BETA",
     priority = Priority.MAJOR,

@@ -15,8 +15,8 @@ import java.util.List;
 
 @Rule(
     key = "InvokeWorkflowFileExistsCheck",
-    name = "Invoke Workflow File Exists Check",
-    description =  "Checks that an invoked workflow is exists in the specified path.",
+    name = "Check that File referenced in 'Invoke Workflow File' activity exists",
+    description =  "Checks that an invoked workflow referenced in an 'Invoke Workflow File' activity exists at the specified path.",
     status = "BETA",
     priority = Priority.BLOCKER,
     tags = {"activity"}

@@ -7,8 +7,8 @@ import org.sonar.check.Rule;
 
 @Rule(
     key = "ValidateMainWorkflowCheck",
-    name = "Validate Main Workflow.",
-    description =  "Verifies that the Main workflow in project.json is valid.",
+    name = "Check that the 'Main' workflow exists",
+    description =  "Verifies that the Main workflow in project.json exists and is valid.",
     status = "BETA",
     priority = Priority.BLOCKER,
     tags = {"project"}

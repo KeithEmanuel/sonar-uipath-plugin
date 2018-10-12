@@ -28,7 +28,8 @@ public class CheckRepository {
             new InvokeWorkflowFilePathCheck(),
             new ArgumentConventionCheck(),
             new VariableConventionCheck(),
-            new WorkflowAnnotationCheck()
+            new WorkflowAnnotationCheck(),
+            new AvoidGetPasswordCheck()
         );
     }
 

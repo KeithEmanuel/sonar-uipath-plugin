@@ -17,7 +17,7 @@ import java.util.List;
 
 @Rule(
     key = "InvokeWorkflowFileArgumentCheck",
-    name = "Invoke Workflow File Argument Check",
+    name = "Check 'Invoke Workflow File' arguments match",
     description =  "Verifies that the arguments of Invoke Workflow activities are valid.",
     status = "BETA",
     priority = Priority.CRITICAL,

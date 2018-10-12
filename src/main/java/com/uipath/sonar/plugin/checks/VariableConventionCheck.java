@@ -18,7 +18,7 @@ import java.util.List;
 
 @Rule(
     key = "VariableConventionCheck",
-    name = "Variable Convention Check",
+    name = "Variables should follow naming convention",
     description =  "Checks that workflow variables follow naming conventions.",
     status = "BETA",
     priority = Priority.MINOR,

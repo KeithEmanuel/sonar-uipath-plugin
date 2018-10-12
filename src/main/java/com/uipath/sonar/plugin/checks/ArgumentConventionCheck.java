@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 @Rule(
     key = "ArgumentConventionCheck",
-    name = "Argument Convention Check",
+    name = "Arguments should follow naming convention",
     description =  "Checks that workflow arguments follow naming conventions.",
     status = "BETA",
     priority = Priority.MINOR,

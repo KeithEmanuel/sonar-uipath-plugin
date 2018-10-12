@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @Rule(
     key = "WorkflowAnnotationCheck",
-    name = "Workflow Annotation Check",
+    name = "Workflows should have top level annotations",
     description =  "Checks that workflow files have a top level annotation.",
     status = "BETA",
     priority = Priority.INFO,
