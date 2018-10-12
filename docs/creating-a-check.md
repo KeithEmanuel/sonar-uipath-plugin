@@ -69,7 +69,7 @@ which would return a list of [Node](https://dom4j.github.io/javadoc/2.0.1/org/do
 If the node is an XML element, you will need to cast it to an [Element](https://dom4j.github.io/javadoc/2.1.0/org/dom4j/Element.html) to do useful things with it.
 Here's a short snippet that grabs the arguments out of a workflow:
 
-    List<Node> nodes = workflow.getXamlDocument().selectNodes("/Activity/x:Members/x:Property");
+    List<Node> nodes = workflow.getXamlDocument().selectNodes("/xa:Activity/x:Members/x:Property");
 
     for(Node node : nodes) {
         Element element = (Element)node;
@@ -89,7 +89,7 @@ If you end up writing a function that may be useful in future checks, try to add
 
 - XPath queries are a little quirky. Some things to note.
     - XPath queries generally require the namespace alias to work.
-    - UiPath XAML files do not have an alias set for the default namespace, but it is required in dom4j to properly query. The Workflow class sets this namespace to 'xa', so if a query on an element without a prefix fails, try prepending 'na:'.
+    - UiPath XAML files do not have an alias set for the default namespace, but it is required in dom4j to properly query. The Workflow class sets this namespace to 'xa', so if a query on an element without a prefix fails, try prepending 'xa:'.
     - If you have a dom4j Element and want to access an attribute, use the full name without the namespace to access this element. This is contrary to their documentation.
 
 - At the moment, every check belongs to the default UiPath quality profile, defined in *com.uipath.sonar.plugin.languages.UiPathQualityProfile*. This may change in the future, and there might be an additional step to register a check to the default profile.
