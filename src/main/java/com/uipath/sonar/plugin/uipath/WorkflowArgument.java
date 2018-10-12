@@ -35,9 +35,14 @@ public class WorkflowArgument {
     }
 
     public static List<WorkflowArgument> LoadFromWorkflow(Workflow workflow){
+
+        LOG.debug("Loading workflow " + workflow.getName());
+
         ArrayList<WorkflowArgument> args = new ArrayList<>();
 
-        List<Node> nodes = workflow.getXamlDocument().selectNodes("/Activity/x:Members/x:Property");
+        List<Node> nodes = workflow.getXamlDocument().selectNodes("xa:Activity/x:Members/x:Property");
+
+        LOG.debug(nodes.size() + " elements found.");
 
         for(Node node : nodes){
             Element element = (Element)node;

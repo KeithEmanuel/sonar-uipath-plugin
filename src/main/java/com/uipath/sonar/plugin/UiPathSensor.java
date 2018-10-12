@@ -2,6 +2,7 @@ package com.uipath.sonar.plugin;
 
 import com.uipath.sonar.plugin.uipath.Workflow;
 import com.uipath.sonar.plugin.uipath.Project;
+import org.dom4j.XPathException;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -73,10 +74,15 @@ public class UiPathSensor implements Sensor{
 
             LOG.info("Checking workflow: " + workflow.getName());
 
-            for(AbstractWorkflowCheck check : CheckRepository.getWorkflowChecks()){
-                try{
+            for (AbstractWorkflowCheck check : CheckRepository.getWorkflowChecks()){
+                try {
                     LOG.info(String.format("Executing check %s...", check.getRule().name()));
                     check.execute(project, workflow);
+                }
+                catch (XPathException e){
+                    // This will catch errors where XPath queries are ran in a document that doesn't contain that namespace.
+                    // IE: Exception: XPath expression uses unbound namespace prefix ui
+                    LOG.warn("Encountered XPath exception when executing check '" + check.getRule().name() + "'. This is likely not an issue.", e);
                 }
                 catch (Exception e){
                     LOG.error("Error when executing check '" + check.getRule().name() + "'", e);

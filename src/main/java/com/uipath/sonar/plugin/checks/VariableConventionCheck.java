@@ -11,22 +11,22 @@ import org.sonar.check.Rule;
 import java.util.List;
 
 /**
- * WorkflowVariablesCheck verifies that variables in a workflow follow naming conventions.
+ * VariableConventionCheck verifies that variables in a workflow follow naming conventions.
  *
  * TODO: Determine naming convention and implement.
  */
 
 @Rule(
-    key = "WorkflowVariablesCheck",
-    name = "Workflow Variables Check",
+    key = "VariableConventionCheck",
+    name = "Variable Convention Check",
     description =  "Checks that workflow variables follow naming conventions.",
     status = "BETA",
     priority = Priority.MINOR,
     tags = {"workflow"}
 )
-public class WorkflowVariablesCheck extends AbstractWorkflowCheck {
+public class VariableConventionCheck extends AbstractWorkflowCheck {
 
-    public WorkflowVariablesCheck(){
+    public VariableConventionCheck(){
         super();
     }
 

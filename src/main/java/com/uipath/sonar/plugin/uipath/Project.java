@@ -2,7 +2,7 @@ package com.uipath.sonar.plugin.uipath;
 
 import com.google.gson.Gson;
 import com.uipath.sonar.plugin.UiPathSensor;
-import com.uipath.sonar.plugin.checks.WorkflowArgumentsCheck;
+import com.uipath.sonar.plugin.checks.ArgumentConventionCheck;
 import org.dom4j.DocumentException;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -15,6 +15,7 @@ import org.sonar.api.utils.log.Loggers;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.Optional;
  */
 public class Project {
 
-    private static final Logger LOG = Loggers.get(WorkflowArgumentsCheck.class);
+    private static final Logger LOG = Loggers.get(ArgumentConventionCheck.class);
 
     private static final String screenshotsFolderName = ".screenshots";
 
@@ -98,13 +99,20 @@ public class Project {
 
     public Optional<Workflow> getWorkflowWithPath(String path){
 
-        URI uri = Utils.getURI(path);
+        try{
+            URI uri = Utils.getURI(path);
 
-        if(!uri.isAbsolute()){
-            uri = getInputFile().uri().resolve(uri);
+            if(!uri.isAbsolute()){
+                uri = getInputFile().uri().resolve(uri);
+            }
+
+            return getWorkflowWithPath(uri);
         }
+        catch (URISyntaxException e){
+            LOG.warn("Encountered an error when trying to parse URI of '" + path + "'", e);
 
-        return getWorkflowWithPath(uri);
+            return Optional.empty();
+        }
     }
 
     public Optional<Workflow> getWorkflowWithPath(URI uri){

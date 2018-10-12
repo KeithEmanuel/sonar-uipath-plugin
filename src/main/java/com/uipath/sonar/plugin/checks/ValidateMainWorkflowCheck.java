@@ -6,16 +6,16 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
 @Rule(
-    key = "MainProjectCheck",
-    name = "Validate Main workflow.",
+    key = "ValidateMainWorkflowCheck",
+    name = "Validate Main Workflow.",
     description =  "Verifies that the Main workflow in project.json is valid.",
     status = "BETA",
     priority = Priority.BLOCKER,
     tags = {"project"}
 )
-public class MainProjectCheck extends AbstractProjectCheck {
+public class ValidateMainWorkflowCheck extends AbstractProjectCheck {
 
-    public MainProjectCheck(){
+    public ValidateMainWorkflowCheck(){
         super();
     }
 

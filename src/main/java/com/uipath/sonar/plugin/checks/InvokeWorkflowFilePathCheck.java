@@ -9,6 +9,7 @@ import org.dom4j.Node;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
+import javax.print.URIException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -36,8 +37,19 @@ public class InvokeWorkflowFilePathCheck extends AbstractWorkflowCheck {
             Element element = (Element) node;
             String workflowFilename = element.attributeValue("WorkflowFileName");
 
-            if(Utils.nodeIsPlainText(workflowFilename) && Utils.getURI(workflowFilename).isAbsolute()){
-                workflow.reportIssue(getRuleKey(), "The path the workflow file should be relative and contained in the project.");
+            if(Utils.nodeIsCode(workflowFilename)){
+                continue;
+            }
+
+            try{
+                URI uri = Utils.getURI(workflowFilename);
+
+                if(uri.isAbsolute()){
+                    workflow.reportIssue(getRuleKey(), "The path the workflow file should be relative and contained in the project.");
+                }
+            }
+            catch(URISyntaxException e){
+                workflow.reportIssue(getRuleKey(), "Could not parse path of '" + workflowFilename + "'. Ensure that it is valid.");
             }
         }
     }

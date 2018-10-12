@@ -1,9 +1,14 @@
 package com.uipath.sonar.plugin.uipath;
 
 import java.net.URI;
+
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
+import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
+import org.jaxen.JaxenException;
+import org.jaxen.SimpleNamespaceContext;
+import org.jaxen.dom4j.Dom4jXPath;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
@@ -12,6 +17,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.apache.commons.io.FilenameUtils;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -46,6 +52,7 @@ public class Workflow {
     private void LoadXamlDocument() throws IOException, DocumentException {
         SAXReader saxReader = new SAXReader();
         xamlDocument = saxReader.read(inputFile.inputStream());
+        xamlDocument.getRootElement().addNamespace("xa","http://schemas.microsoft.com/netfx/2009/xaml/activities");
     }
 
     private void LoadArguments(){

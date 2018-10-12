@@ -26,15 +26,16 @@ public class CheckRepository {
             new InvokeWorkflowFileArgumentCheck(),
             new InvokeWorkflowFileExistsCheck(),
             new InvokeWorkflowFilePathCheck(),
-            new WorkflowArgumentsCheck(),
-            new WorkflowVariablesCheck()
+            new ArgumentConventionCheck(),
+            new VariableConventionCheck(),
+            new WorkflowAnnotationCheck()
         );
     }
 
     // Add new ProjectChecks here!
     public static List<AbstractProjectCheck> getProjectChecks(){
         return Arrays.asList(
-            new MainProjectCheck()
+            new ValidateMainWorkflowCheck()
         );
     }
 

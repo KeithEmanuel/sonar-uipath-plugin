@@ -23,7 +23,7 @@ import java.util.List;
 )
 public class InvokeWorkflowFileExistsCheck extends AbstractWorkflowCheck {
 
-    private static final Logger LOG = Loggers.get(WorkflowArgumentsCheck.class);
+    private static final Logger LOG = Loggers.get(ArgumentConventionCheck.class);
 
     public InvokeWorkflowFileExistsCheck(){
         super();
@@ -39,7 +39,7 @@ public class InvokeWorkflowFileExistsCheck extends AbstractWorkflowCheck {
             String workflowFilename = element.attributeValue("WorkflowFileName");
 
             if(Utils.nodeIsCode(workflowFilename)){
-                break;  // This is code, not a literal string.
+                continue;  // This is code, not a literal string.
             }
 
             boolean workflowExists = project.getWorkflowWithPath(element.attributeValue("WorkflowFileName")).isPresent();

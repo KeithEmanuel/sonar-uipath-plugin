@@ -25,7 +25,7 @@ import java.util.List;
 )
 public class InvokeWorkflowFileArgumentCheck extends AbstractWorkflowCheck {
 
-    private static final Logger LOG = Loggers.get(WorkflowArgumentsCheck.class);
+    private static final Logger LOG = Loggers.get(ArgumentConventionCheck.class);
 
     private static final List<String> ARG_ELEMENT_NAMES = Arrays.asList( "InArgument", "OutArgument", "InOutArgument" );
 

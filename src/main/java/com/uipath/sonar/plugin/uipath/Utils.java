@@ -1,5 +1,6 @@
 package com.uipath.sonar.plugin.uipath;
 
+import javax.print.URIException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -12,13 +13,8 @@ public final class Utils {
      * @param path The path to the workflow.
      * @return A URI object.
      */
-    public static URI getURI(String path){
-        try{
-            return new URI(path.replace('\\', '/'));
-        }
-        catch(URISyntaxException e){
-            throw new RuntimeException("Could not parse path '" + path + "'", e);
-        }
+    public static URI getURI(String path) throws URISyntaxException {
+        return new URI(path.replace('\\', '/'));
     }
 
     /**
