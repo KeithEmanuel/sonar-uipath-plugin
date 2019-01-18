@@ -1,6 +1,7 @@
 package com.uipath.sonar.plugin;
 
 import com.uipath.sonar.plugin.checks.*;
+import org.sonar.api.config.PropertyDefinition;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,27 +18,34 @@ public class CheckRepository {
     public static final String REPOSITORY_NAME = "UipathAnalyzer";
     public static final String PROFILE_NAME = "UiPath Way";
 
-    private CheckRepository(){
-    }
-
-    // Add new WorkflowChecks here!
-    public static List<AbstractWorkflowCheck> getWorkflowChecks(){
-        return Arrays.asList(
+    private static final List<AbstractWorkflowCheck> WORKFLOW_CHECKS =
+        Arrays.asList(
             new InvokeWorkflowFileArgumentCheck(),
             new InvokeWorkflowFileExistsCheck(),
             new InvokeWorkflowFilePathCheck(),
             new ArgumentConventionCheck(),
             new VariableConventionCheck(),
             new WorkflowAnnotationCheck(),
-            new AvoidGetPasswordCheck()
+            new AvoidGetPasswordCheck(),
+            new AvoidChangingCurrentDirectory()
         );
+
+    private static final List<AbstractProjectCheck> PROJECT_CHECKS =
+        Arrays.asList(
+            new ValidateMainWorkflowCheck()
+        );
+
+    private CheckRepository(){
+    }
+
+    // Add new WorkflowChecks here!
+    public static List<AbstractWorkflowCheck> getWorkflowChecks(){
+        return WORKFLOW_CHECKS;
     }
 
     // Add new ProjectChecks here!
     public static List<AbstractProjectCheck> getProjectChecks(){
-        return Arrays.asList(
-            new ValidateMainWorkflowCheck()
-        );
+        return PROJECT_CHECKS;
     }
 
     public static List<Class> getWorkflowCheckClasses(){
@@ -66,5 +74,12 @@ public class CheckRepository {
         allClasses.addAll(getWorkflowCheckClasses());
 
         return allClasses;
+    }
+
+    public static List<PropertyDefinition> getAllProperties(){
+        return getAllChecks().stream()
+            .map(AbstractCheck::getProperties)
+            .flatMap(List::stream)
+            .collect(Collectors.toList());
     }
 }

@@ -4,7 +4,10 @@ import com.uipath.sonar.plugin.hooks.DisplayIssuesInScanner;
 import com.uipath.sonar.plugin.languages.UiPathLanguage;
 import com.uipath.sonar.plugin.languages.UiPathQualityProfile;
 import com.uipath.sonar.plugin.rules.UiPathRulesDefinition;
+import com.uipath.sonar.plugin.settings.UiPathLanguageProperties;
 import org.sonar.api.Plugin;
+import org.sonar.api.config.PropertyDefinition;
+import org.sonar.api.resources.Qualifiers;
 
 /**
  * UiPathPlugin simply defines what classes are used for this plugin.
@@ -22,5 +25,13 @@ public class UiPathPlugin implements Plugin {
             UiPathQualityProfile.class,
             UiPathRulesDefinition.class,
             DisplayIssuesInScanner.class);
+
+        for(PropertyDefinition prop : UiPathLanguageProperties.getProperties()){
+            context.addExtension(prop);
+        }
+
+        for(PropertyDefinition prop : CheckRepository.getAllProperties()){
+            context.addExtension(prop);
+        }
     }
 }

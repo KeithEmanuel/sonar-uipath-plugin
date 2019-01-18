@@ -17,12 +17,12 @@ public class UiPathLanguage extends AbstractLanguage {
 
     public static final String KEY = "uipath";
 
-    public static final String XAML_LANGUAGE_NAME = "UiPath";
+    public static final String UIPATH_LANGUAGE_NAME = "UiPath";
 
     private Configuration configuration;
 
     public UiPathLanguage(Configuration config){
-        super(KEY, XAML_LANGUAGE_NAME);
+        super(KEY, UIPATH_LANGUAGE_NAME);
         this.configuration = config;
     }
 
