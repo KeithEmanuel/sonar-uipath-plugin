@@ -88,9 +88,11 @@ public class ArgumentConventionCheck extends AbstractWorkflowCheck {
                 case Out:
                     if(!outPattern.matcher(name).find())
                         reportIssue(workflow, arg);
+                    break;
                 case InOut:
                     if(!inOutPattern.matcher(name).find())
                         reportIssue(workflow, arg);
+                    break;
             }
         }
     }

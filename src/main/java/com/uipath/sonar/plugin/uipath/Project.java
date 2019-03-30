@@ -49,6 +49,14 @@ public class Project {
         initialize();
     }
 
+    /**
+     * For unit testing.
+     * @param workflows
+     */
+    private Project(List<Workflow> workflows){
+        this.workflows = workflows;
+    }
+
     public static Project FromSensorContext(UiPathSensor sensor, SensorContext sensorContext){
 
         if(!sensor.hasProjectJson() || !sensor.hasWorkflows()){
@@ -65,6 +73,13 @@ public class Project {
             throw new RuntimeException("An unexpected DocumentException occurred.", e);
         }
     }
+
+    public static Project ForUnitTesting(List<Workflow> workflows)
+    {
+        return new Project(workflows);
+    }
+
+
 
     private void initialize() throws IOException, DocumentException {
 

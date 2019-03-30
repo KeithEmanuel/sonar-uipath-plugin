@@ -26,7 +26,7 @@ public class UiPathSensor implements Sensor{
     private static final Logger LOG = Loggers.get(UiPathSensor.class);
     private static final Version V6_0 = Version.create(6, 0);
 
-    private final Checks<Object> checks;
+    //private final Checks<Object> checks;
     private FileSystem fileSystem;
     private FilePredicate projectJsonPredicate;
     private FilePredicate workflowPredicate;
@@ -35,9 +35,9 @@ public class UiPathSensor implements Sensor{
     private String projectFilePredicatePattern;
     private String workflowFilePredicatePattern;
 
-    public UiPathSensor(FileSystem fileSystem, CheckFactory checkFactory){
-        this.checks = checkFactory.create(CheckRepository.REPOSITORY_KEY)
-                .addAnnotatedChecks((Iterable<?>)CheckRepository.getProjectCheckClasses());
+    public UiPathSensor(/*FileSystem fileSystem, CheckFactory checkFactory*/){
+    //    this.checks = checkFactory.create(CheckRepository.REPOSITORY_KEY)
+    //            .addAnnotatedChecks((Iterable<?>)CheckRepository.getProjectCheckClasses());
     }
 
     @Override
