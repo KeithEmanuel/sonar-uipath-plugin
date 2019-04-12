@@ -1,7 +1,9 @@
 package com.uipath.sonar.plugin.uipath;
 
+import java.io.*;
 import java.net.URI;
 
+import com.uipath.sonar.plugin.HasInputFile;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.XPath;
@@ -16,7 +18,7 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.apache.commons.io.FilenameUtils;
-import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,18 +30,28 @@ import java.util.List;
  * This getXamlDocument method provides a DOM representation of the underlying XAML file. It uses the dom4j library.
  * Refer to dom4j documentation for usage. Most use cases should be easily fulfilled by a simple XPATH query.
  */
-public class Workflow {
+public class Workflow implements HasInputFile {
 
     private static final Logger LOG = Loggers.get(Workflow.class);
     private Project project;
     private Document xamlDocument;
     private InputFile inputFile;
+    private File file;
+    private InputStream fileStream;
     private List<WorkflowArgument> arguments;
 
 
     public Workflow(Project project, InputFile inputFile) throws IOException, DocumentException {
         this.project = project;
         this.inputFile = inputFile;
+        fileStream = new FileInputStream(file);
+
+        Initialize();
+    }
+
+    public Workflow(File file) throws IOException, DocumentException {
+        this.file = file;
+        fileStream = new FileInputStream(file);
 
         Initialize();
     }
@@ -51,7 +63,8 @@ public class Workflow {
 
     private void LoadXamlDocument() throws IOException, DocumentException {
         SAXReader saxReader = new SAXReader();
-        xamlDocument = saxReader.read(inputFile.inputStream());
+
+        xamlDocument = saxReader.read(fileStream);
         xamlDocument.getRootElement().addNamespace("xa","http://schemas.microsoft.com/netfx/2009/xaml/activities");
     }
 
@@ -81,7 +94,7 @@ public class Workflow {
         return getInputFile().uri();
     }
 
-    public void reportIssue(RuleKey ruleKey, String message){
+    /*public void reportIssue(RuleKey ruleKey, String message){
 
         NewIssue issue = project.getSensorContext().newIssue()
             .forRule(ruleKey);
@@ -92,7 +105,7 @@ public class Workflow {
         issue.at(location);
 
         issue.save();
-    }
+    }*/
 
     @Override
     public String toString(){

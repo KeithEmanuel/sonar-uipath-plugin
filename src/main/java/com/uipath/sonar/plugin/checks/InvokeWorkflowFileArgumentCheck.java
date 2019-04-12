@@ -1,5 +1,6 @@
 package com.uipath.sonar.plugin.checks;
 
+import com.uipath.sonar.plugin.Issues;
 import com.uipath.sonar.plugin.uipath.Utils;
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
 import com.uipath.sonar.plugin.uipath.Project;
@@ -71,7 +72,7 @@ public class InvokeWorkflowFileArgumentCheck extends AbstractWorkflowCheck {
                         if(!hasMatch){
                             String displayName = element.attributeValue("DisplayName");
 
-                            workflow.reportIssue(getRuleKey(), "Invalid Invocation of '" + workflowFilename
+                            Issues.report(workflow, getRuleKey(), "Invalid Invocation of '" + workflowFilename
                                 + "' in activity '" + displayName + "'. Supplied argument '" + name + "' does not exist.");
                         }
                     }

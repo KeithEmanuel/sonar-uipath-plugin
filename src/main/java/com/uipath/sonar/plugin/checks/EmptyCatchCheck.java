@@ -1,6 +1,7 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
+import com.uipath.sonar.plugin.Issues;
 import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import org.dom4j.Element;
@@ -39,7 +40,7 @@ public class EmptyCatchCheck extends AbstractWorkflowCheck {
                 String exceptionType = activityActionElement.attributeValue("x:TypeArguments");
 
                 if(activityActionElement.elements().size() < 2){
-                    workflow.reportIssue(getRuleKey(), "Catch block of '" + displayName + "', catch block for exception type '" + exceptionType +"' should not be empty.");
+                    Issues.report(workflow, getRuleKey(), "Catch block of '" + displayName + "', catch block for exception type '" + exceptionType +"' should not be empty.");
                 }
             }
         }

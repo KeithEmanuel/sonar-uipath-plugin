@@ -1,6 +1,7 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
+import com.uipath.sonar.plugin.Issues;
 import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.uipath.Utils;
 import com.uipath.sonar.plugin.uipath.Workflow;
@@ -44,11 +45,11 @@ public class InvokeWorkflowFilePathCheck extends AbstractWorkflowCheck {
                 URI uri = Utils.getURI(workflowFilename);
 
                 if(uri.isAbsolute()){
-                    workflow.reportIssue(getRuleKey(), "The path the workflow file should be relative and contained in the project.");
+                    Issues.report(workflow, getRuleKey(), "The path the workflow file should be relative and contained in the project.");
                 }
             }
             catch(URISyntaxException e){
-                workflow.reportIssue(getRuleKey(), "Could not parse path of '" + workflowFilename + "'. Ensure that it is valid.");
+                Issues.report(workflow, getRuleKey(), "Could not parse path of '\" + workflowFilename + \"'. Ensure that it is valid.");
             }
         }
     }

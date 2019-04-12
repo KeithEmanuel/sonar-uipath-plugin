@@ -1,8 +1,10 @@
 package com.uipath.sonar.plugin.uipath;
 
 import com.google.gson.Gson;
+import com.uipath.sonar.plugin.HasInputFile;
 import com.uipath.sonar.plugin.UiPathSensor;
 import com.uipath.sonar.plugin.checks.ArgumentConventionCheck;
+import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -11,16 +13,22 @@ import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import sun.nio.cs.StreamDecoder;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Project represents a UiPath project, built from a project.json file.
@@ -29,7 +37,7 @@ import java.util.Optional;
  * Issues must be created on a SensorContext and reported on InputFile objects. This class wraps an InputFile
  * for project.json. Any calls to reportIssue will be created on the project.json file.
  */
-public class Project {
+public class Project implements HasInputFile {
 
     private static final Logger LOG = Loggers.get(ArgumentConventionCheck.class);
 
@@ -40,7 +48,7 @@ public class Project {
     private InputFile projectJsonInputFile;
     private ProjectJson projectJson;
     private List<Workflow> workflows = new ArrayList<>();
-    private Gson gson = new Gson();
+    private static Gson gson = new Gson();
 
     private Project(UiPathSensor sensor, SensorContext sensorContext) throws IOException, DocumentException{
         this.sensor = sensor;
@@ -53,7 +61,8 @@ public class Project {
      * For unit testing.
      * @param workflows
      */
-    private Project(List<Workflow> workflows){
+    private Project(ProjectJson projectJson, List<Workflow> workflows){
+        this.projectJson = projectJson;
         this.workflows = workflows;
     }
 
@@ -74,12 +83,18 @@ public class Project {
         }
     }
 
-    public static Project ForUnitTesting(List<Workflow> workflows)
-    {
-        return new Project(workflows);
+    public static Project FromDirectory(Path path) throws IOException, DocumentException {
+        ArrayList<Workflow> workflows = new ArrayList<>();
+
+        for(Path xaml : Files.walk(path).filter(f -> f.endsWith(".xaml")).collect(Collectors.toList())){
+            workflows.add(new Workflow(xaml.toFile()));
+        }
+
+        File projectJsonFile = Arrays.stream(path.toFile().listFiles()).filter(f -> f.getName() == "project.json").findFirst().get();
+        ProjectJson projectJson = gson.fromJson(new FileReader(projectJsonFile), ProjectJson.class);
+
+        return new Project(projectJson, workflows);
     }
-
-
 
     private void initialize() throws IOException, DocumentException {
 
@@ -155,7 +170,7 @@ public class Project {
         return sensorContext;
     }
 
-    public void reportIssue(RuleKey ruleKey, String message){
+    /*public void reportIssue(RuleKey ruleKey, String message){
 
         NewIssue issue = sensorContext.newIssue()
             .forRule(ruleKey);
@@ -166,5 +181,5 @@ public class Project {
         issue.at(location);
 
         issue.save();
-    }
+    }*/
 }

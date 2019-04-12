@@ -1,6 +1,7 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
+import com.uipath.sonar.plugin.Issues;
 import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.uipath.Utils;
 import com.uipath.sonar.plugin.uipath.Workflow;
@@ -47,7 +48,7 @@ public class InvokeWorkflowFileExistsCheck extends AbstractWorkflowCheck {
             if(!workflowExists){
                 String displayName = element.attributeValue("DisplayName");
 
-                workflow.reportIssue(getRuleKey(), "Invoked workflow '" + workflowFilename + "' for activity '" + displayName +"' does not exist.");
+                Issues.report(workflow, getRuleKey(), "Invoked workflow '" + workflowFilename + "' for activity '" + displayName +"' does not exist.");
             }
         }
     }

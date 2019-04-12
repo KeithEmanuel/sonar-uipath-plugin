@@ -113,6 +113,8 @@ public class UiPathSensor implements Sensor{
             .matchesPathPattern(workflowFilePredicatePattern);
 
         this.allPredicate = this.fileSystem.predicates().or(projectJsonPredicate, workflowPredicate);
+
+        Issues.setContext(context);
     }
 
     public boolean hasProjectJson(){

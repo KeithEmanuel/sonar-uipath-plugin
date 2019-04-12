@@ -1,6 +1,7 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
+import com.uipath.sonar.plugin.Issues;
 import com.uipath.sonar.plugin.uipath.Utils;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import com.uipath.sonar.plugin.uipath.Project;
@@ -62,7 +63,7 @@ public class VariableConventionCheck extends AbstractWorkflowCheck {
            String name = element.attributeValue("Name");
 
            if(!formatPattern.matcher(name).find()){
-               workflow.reportIssue(getRuleKey(), "Variable '" + name + "' does not follow convention. Variables should match the format '" + getVariableFormat() + "'.");
+               Issues.report(workflow, getRuleKey(), "Variable '" + name + "' does not follow convention. Variables should match the format '" + getVariableFormat() + "'.");
            }
         }
     }

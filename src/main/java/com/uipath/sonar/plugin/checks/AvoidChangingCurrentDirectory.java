@@ -1,6 +1,7 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
+import com.uipath.sonar.plugin.Issues;
 import com.uipath.sonar.plugin.languages.UiPathLanguage;
 import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.uipath.Workflow;
@@ -44,7 +45,7 @@ public class AvoidChangingCurrentDirectory extends AbstractWorkflowCheck {
            String text = element.getText();
 
            if(text.equals("[Environment.CurrentDirectory]")){
-               workflow.reportIssue(getRuleKey(), "Altering the Environment.CurrentDirectory property should be avoided.");
+               Issues.report(workflow, getRuleKey(), "Altering the Environment.CurrentDirectory property should be avoided.");
            }
         }
     }

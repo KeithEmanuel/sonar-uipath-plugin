@@ -1,6 +1,7 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
+import com.uipath.sonar.plugin.Issues;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import com.uipath.sonar.plugin.uipath.Project;
 import org.apache.commons.lang.StringUtils;
@@ -40,7 +41,7 @@ public class WorkflowAnnotationCheck extends AbstractWorkflowCheck {
         LOG.debug("SIZE: " + nodes.size());
 
         if(nodes.size() == 0){
-            workflow.reportIssue(getRuleKey(), "Workflow '" + workflow.getName() + "' should have a top level annotation.");
+            Issues.report(workflow, getRuleKey(), "Workflow '" + workflow.getName() + "' should have a top level annotation.");
         }
     }
 }

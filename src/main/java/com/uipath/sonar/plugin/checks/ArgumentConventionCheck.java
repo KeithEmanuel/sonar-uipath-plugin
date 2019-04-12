@@ -1,6 +1,7 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
+import com.uipath.sonar.plugin.Issues;
 import com.uipath.sonar.plugin.languages.UiPathLanguage;
 import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.uipath.Utils;
@@ -101,7 +102,7 @@ public class ArgumentConventionCheck extends AbstractWorkflowCheck {
 
         String label = arg.getDirection() == Direction.InOut ? "In/Out" : arg.getDirection().toString();
 
-        workflow.reportIssue(getRuleKey(), "Argument '" + arg.getName()
+        Issues.report(workflow, getRuleKey(), "Argument '" + arg.getName()
             + "' does not follow naming convention. "
             + label + " arguments should follow the convention '"
             + getArgFormat(arg.getDirection())
