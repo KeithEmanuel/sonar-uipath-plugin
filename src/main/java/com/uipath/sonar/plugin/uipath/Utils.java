@@ -37,13 +37,13 @@ public final class Utils {
 
     // Regex patterns for conventions
     public static final String CAMELCASE_IDENTIFIER = "[camelCase]";
-    private static final String CAMELCASE_PATTERN = "^[a-z][\\w\\d]+$";
+    private static final String CAMELCASE_PATTERN = "[a-z][\\w\\d]+";
     public static final String PASCALCASE_IDENTIFIER = "[PascalCase]";
-    private static final String PASCALCASE_PATTERN = "^[A-Z][\\w\\d]+$";
+    private static final String PASCALCASE_PATTERN = "[A-Z][\\w\\d]+";
     public static final String UPPERCASE_IDENTIFIER = "[UPPERCASE]";
-    private static final String UPPERCASE_PATTERN = "^[A-Z\\d]+$";
+    private static final String UPPERCASE_PATTERN = "[A-Z\\d]+";
     public static final String LOWER_IDENTIFIER = "[lowercase]";
-    private static final String LOWERCASE_PATTERN = "^[a-z\\d]+$";
+    private static final String LOWERCASE_PATTERN = "[a-z\\d]+";
 
     /**
      * Generates a regex pattern to match the specified convention.
