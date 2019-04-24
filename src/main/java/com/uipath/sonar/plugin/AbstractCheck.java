@@ -53,6 +53,10 @@ public class AbstractCheck {
     }
 
     protected String getPropertyValue(String key){
-        return sensorContext.config().get(key).orElse("");
+        try{
+            return sensorContext.config().get(key).orElse("");
+        } catch (NullPointerException ex){
+            return null;
+        }
     }
 }

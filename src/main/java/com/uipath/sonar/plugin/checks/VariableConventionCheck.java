@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 public class VariableConventionCheck extends AbstractWorkflowCheck {
 
     public static final String VARIABLE_FORMAT_KEY = "uipath.check.variableconventioncheck.format";
+    private static final String VARIABLE_FORMAT_DEFAULT_VALUE = "[camelCase]";
 
     public VariableConventionCheck(){
         super();
@@ -43,7 +44,7 @@ public class VariableConventionCheck extends AbstractWorkflowCheck {
 
         return Arrays.asList(
             PropertyDefinition.builder(VARIABLE_FORMAT_KEY)
-                .defaultValue("[camelCase]")
+                .defaultValue(VARIABLE_FORMAT_DEFAULT_VALUE)
                 .name("Variable Convention Format")
                 .description("Naming convention format for variables. Accepts [PascalCase], [camelCase], [UPPERCASE], and [lowercase], case sensitive.")
                 .onQualifiers(Qualifiers.PROJECT)
@@ -69,6 +70,8 @@ public class VariableConventionCheck extends AbstractWorkflowCheck {
     }
 
     private String getVariableFormat(){
-        return getPropertyValue(VARIABLE_FORMAT_KEY);
+        String value = getPropertyValue(VARIABLE_FORMAT_KEY);
+
+        return value == null ? VARIABLE_FORMAT_DEFAULT_VALUE : value;
     }
 }

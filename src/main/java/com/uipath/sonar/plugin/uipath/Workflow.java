@@ -73,7 +73,12 @@ public class Workflow implements HasInputFile {
     }
 
     public String getName(){
-        return FilenameUtils.getName(inputFile.uri().getPath());
+        if(inputFile != null){
+            return FilenameUtils.getName(inputFile.uri().getPath());
+        }
+        else {
+            return FilenameUtils.getName(file.getName());
+        }
     }
 
     public Project getProject(){

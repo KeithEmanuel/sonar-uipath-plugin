@@ -1,6 +1,5 @@
 package com.uipath.sonar.plugin;
 
-import com.sun.tools.javac.util.List;
 import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 public class Issues {
 
     private static SensorContext sensorContext = null;
-    private static ArrayList<Issue> issues;
+    private static ArrayList<Issue> issues = new ArrayList<>();
 
     public static void setContext(SensorContext sensorContext){
         Issues.sensorContext = sensorContext;

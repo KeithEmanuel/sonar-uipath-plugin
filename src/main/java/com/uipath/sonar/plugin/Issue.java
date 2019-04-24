@@ -1,6 +1,5 @@
 package com.uipath.sonar.plugin;
 
-import javafx.css.Rule;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.rule.RuleKey;
 

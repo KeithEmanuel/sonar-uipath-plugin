@@ -13,7 +13,6 @@ import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import sun.nio.cs.StreamDecoder;
 
 import java.io.File;
 import java.io.FileReader;
@@ -86,11 +85,11 @@ public class Project implements HasInputFile {
     public static Project FromDirectory(Path path) throws IOException, DocumentException {
         ArrayList<Workflow> workflows = new ArrayList<>();
 
-        for(Path xaml : Files.walk(path).filter(f -> f.endsWith(".xaml")).collect(Collectors.toList())){
+        for(Path xaml : Files.walk(path).filter(f -> f.toFile().getName().endsWith(".xaml")).collect(Collectors.toList())){
             workflows.add(new Workflow(xaml.toFile()));
         }
 
-        File projectJsonFile = Arrays.stream(path.toFile().listFiles()).filter(f -> f.getName() == "project.json").findFirst().get();
+        File projectJsonFile = Arrays.stream(path.toFile().listFiles()).filter(f -> f.getName().equals("project.json")).findFirst().get();
         ProjectJson projectJson = gson.fromJson(new FileReader(projectJsonFile), ProjectJson.class);
 
         return new Project(projectJson, workflows);
