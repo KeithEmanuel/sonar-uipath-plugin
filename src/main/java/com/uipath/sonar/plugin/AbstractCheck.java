@@ -8,6 +8,8 @@ import org.sonar.api.utils.AnnotationUtils;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -23,12 +25,15 @@ public class AbstractCheck {
     private Rule rule;
     private RuleKey ruleKey;
 
+    private HashMap<String, String> propertyOverrides;
+
     protected AbstractCheck(){
         rule = AnnotationUtils.getAnnotation(this.getClass(), Rule.class);
         ruleKey = RuleKey.of(getRepositoryKeyString(), getRuleKeyString());
+        propertyOverrides = new HashMap<>();
     }
 
-    public List<PropertyDefinition> getProperties() {
+    public List<PropertyDefinition> defineProperties() {
         return new ArrayList<>();
     }
 
@@ -52,11 +57,34 @@ public class AbstractCheck {
         this.sensorContext = context;
     }
 
+    /**
+     * Allows you to overwrite a defined property value, or define them if one does not exist. Used for unit testing.
+     * @param key The Property key, defined in the Check class, to overwrite.
+     * @param value The overwritten value.
+     */
+    public void overwriteProperty(String key, String value){
+        propertyOverrides.put(key, value);
+    }
+
     protected String getPropertyValue(String key){
+
+        if(propertyOverrides.containsKey(key)){
+            return propertyOverrides.get(key);
+        }
+
         try{
             return sensorContext.config().get(key).orElse("");
         } catch (NullPointerException ex){
             return null;
         }
+    }
+
+    protected String getPropertyValue(String key, String defaultValue){
+        String value = getPropertyValue(key);
+        return value == null ? defaultValue : value;
+    }
+
+    protected void reportIssue(HasInputFile hasInputFile, String message){
+        Issues.report(hasInputFile, getRuleKey(), message);
     }
 }

@@ -40,7 +40,7 @@ public class VariableConventionCheck extends AbstractWorkflowCheck {
     }
 
     @Override
-    public List<PropertyDefinition> getProperties(){
+    public List<PropertyDefinition> defineProperties(){
 
         return Arrays.asList(
             PropertyDefinition.builder(VARIABLE_FORMAT_KEY)
@@ -71,7 +71,6 @@ public class VariableConventionCheck extends AbstractWorkflowCheck {
 
     private String getVariableFormat(){
         String value = getPropertyValue(VARIABLE_FORMAT_KEY);
-
         return value == null ? VARIABLE_FORMAT_DEFAULT_VALUE : value;
     }
 }

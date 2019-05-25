@@ -21,7 +21,7 @@ public class Issues {
     public static void report(HasInputFile hasInputFile, RuleKey ruleKey, String message){
         issues.add(new Issue(hasInputFile, ruleKey, message));
 
-        if(sensorContext != null){
+        if(sensorContext != null && hasInputFile.hasInputFile()){
             NewIssue issue = sensorContext.newIssue()
                 .forRule(ruleKey);
             NewIssueLocation location = issue.newLocation();
@@ -34,15 +34,15 @@ public class Issues {
         }
     }
 
-    public static ArrayList<Issue> getIssues(){
+    public static ArrayList<Issue> getAll(){
         return issues;
     }
 
-    public static void clearIssues(){
+    public static void clear(){
         issues.clear();
     }
 
-    public static int getIssueCount(){
+    public static int getCount(){
         return issues.size();
     }
 }

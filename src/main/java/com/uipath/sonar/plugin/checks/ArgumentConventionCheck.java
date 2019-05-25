@@ -44,26 +44,23 @@ public class ArgumentConventionCheck extends AbstractWorkflowCheck {
     }
 
     @Override
-    public List<PropertyDefinition> getProperties(){
+    public List<PropertyDefinition> defineProperties(){
 
         return Arrays.asList(
             PropertyDefinition.builder(IN_ARGUMENT_FORMAT_KEY)
                 .defaultValue(IN_ARGUMENT_FORMAT_DEFAULT_VALUE)
-                //.category(UiPathLanguage.UIPATH_LANGUAGE_NAME)
                 .name("InArgument Convention Format")
                 .description("Naming convention format for input arguments. Accepts [PascalCase], [camelCase], [UPPERCASE], and [lowercase], case sensitive.")
                 .onQualifiers(Qualifiers.PROJECT)
                 .build(),
             PropertyDefinition.builder(OUT_ARGUMENT_FORMAT_KEY)
                 .defaultValue(OUT_ARGUMENT_FORMAT_DEFAULT_VALUE)
-                //.category(UiPathLanguage.UIPATH_LANGUAGE_NAME)
                 .name("OutArgument Convention Format")
                 .description("Naming convention format for output arguments. Accepts [PascalCase], [camelCase], [UPPERCASE], and [lowercase], case sensitive.")
                 .onQualifiers(Qualifiers.PROJECT)
                 .build(),
             PropertyDefinition.builder(IO_ARGUMENT_FORMAT_KEY)
                 .defaultValue(IO_ARGUMENT_FORMAT_DEFAULT_VALUE)
-                //.category(UiPathLanguage.UIPATH_LANGUAGE_NAME)
                 .name("InOutArgument Convention Format")
                 .description("Naming convention format for input/output arguments. Accepts [PascalCase], [camelCase], [UPPERCASE], and [lowercase], case sensitive.")
                 .onQualifiers(Qualifiers.PROJECT)
@@ -74,23 +71,23 @@ public class ArgumentConventionCheck extends AbstractWorkflowCheck {
     @Override
     public void execute(Project project, Workflow workflow) {
 
-        Pattern inPattern = Utils.createRegexPatternForConvention(getInArgFormat());
-        Pattern outPattern = Utils.createRegexPatternForConvention(getOutArgFormat());
-        Pattern inOutPattern = Utils.createRegexPatternForConvention(getInOutArgFormat());
 
         for(WorkflowArgument arg : workflow.getArguments()) {
             String name = arg.getName();
 
             switch(arg.getDirection()){
                 case In:
+                    Pattern inPattern = Utils.createRegexPatternForConvention(getInArgFormat());
                     if(!inPattern.matcher(name).find())
                         reportIssue(workflow, arg);
                     break;
                 case Out:
+                    Pattern outPattern = Utils.createRegexPatternForConvention(getOutArgFormat());
                     if(!outPattern.matcher(name).find())
                         reportIssue(workflow, arg);
                     break;
                 case InOut:
+                    Pattern inOutPattern = Utils.createRegexPatternForConvention(getInOutArgFormat());
                     if(!inOutPattern.matcher(name).find())
                         reportIssue(workflow, arg);
                     break;
@@ -110,15 +107,15 @@ public class ArgumentConventionCheck extends AbstractWorkflowCheck {
     }
 
     public String getInArgFormat(){
-        return getPropertyValue(IN_ARGUMENT_FORMAT_KEY);
+        return getPropertyValue(IN_ARGUMENT_FORMAT_KEY, IN_ARGUMENT_FORMAT_DEFAULT_VALUE);
     }
 
     public String getOutArgFormat(){
-        return getPropertyValue(OUT_ARGUMENT_FORMAT_KEY);
+        return getPropertyValue(OUT_ARGUMENT_FORMAT_KEY, OUT_ARGUMENT_FORMAT_DEFAULT_VALUE);
     }
 
     public String getInOutArgFormat(){
-        return getPropertyValue(IO_ARGUMENT_FORMAT_KEY);
+        return getPropertyValue(IO_ARGUMENT_FORMAT_KEY, IO_ARGUMENT_FORMAT_DEFAULT_VALUE);
     }
 
     public String getArgFormat(Direction direction){

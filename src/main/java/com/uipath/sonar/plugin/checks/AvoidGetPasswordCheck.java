@@ -34,7 +34,7 @@ public class AvoidGetPasswordCheck extends AbstractWorkflowCheck{
         List<Node> nodes = workflow.getXamlDocument().selectNodes("//ui:GetPassword");
 
         if(nodes.size() > 0){
-            Issues.report(workflow, getRuleKey(), "Avoid using the 'GetPassword' activity. Use Orchestrator assets instead.");
+            Issues.report(workflow, getRuleKey(), "Avoid using the 'GetPassword' activity. Use Orchestrator assets instead.");  
         }
     }
 }

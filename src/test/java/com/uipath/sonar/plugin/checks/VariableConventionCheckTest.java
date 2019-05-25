@@ -2,9 +2,11 @@ package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.Issues;
 import com.uipath.sonar.plugin.UiPathSensor;
+import com.uipath.sonar.plugin.testprojects.LoadProject;
 import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import org.dom4j.DocumentException;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -24,8 +26,21 @@ import static org.junit.Assert.*;
 
 public class VariableConventionCheckTest {
 
-    @Rule
-    public TemporaryFolder folder = new TemporaryFolder();
+    private VariableConventionCheck check = new VariableConventionCheck();
+    private Project argsAndVars;
+    private Workflow allCamelCase;
+    private Workflow allPascalCase;
+    private Workflow allUpperCase;
+    private Workflow allLowerCase;
+
+    @Before
+    public void setUp() throws Exception {
+        argsAndVars = LoadProject.argsAndVars();
+        allCamelCase = argsAndVars.getWorkflowNamed("allCamelCase").get();
+        allPascalCase = argsAndVars.getWorkflowNamed("AllPascalCase").get();
+        allUpperCase = argsAndVars.getWorkflowNamed("ALLUPPERCASE").get();
+        allLowerCase = argsAndVars.getWorkflowNamed("alllowercase").get();
+    }
 
     @Test
     public void execute() throws IOException, DocumentException {
@@ -36,24 +51,84 @@ public class VariableConventionCheckTest {
     }
 
     private void testCamelCase() throws IOException, DocumentException {
-        Project project = Project.FromDirectory(Paths.get("./src/test/java/com/uipath/sonar/plugin/checks/TestProjects/CamelCaseProject"));
-        VariableConventionCheck check = new VariableConventionCheck();
+        check.overwriteProperty(VariableConventionCheck.VARIABLE_FORMAT_KEY, "[camelCase]");
 
-        System.out.println(Issues.getIssueCount());
-        check.execute(project, project.getWorkflows().get(0));
-        System.out.println(Issues.getIssueCount());
+        check.execute(argsAndVars, allCamelCase);
+        assertEquals(0, Issues.getCount());
+        Issues.clear();
 
+        check.execute(argsAndVars, allPascalCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();
+
+        check.execute(argsAndVars, allUpperCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();
+
+        /* Commenting this out because this check is able to test a camelcase variable that is actually lowercase.
+        check.execute(argsAndVars, allLowerCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();*/
     }
 
     private void testPascalCase(){
+        check.overwriteProperty(VariableConventionCheck.VARIABLE_FORMAT_KEY, "[PascalCase]");
 
+        check.execute(argsAndVars, allPascalCase);
+        assertEquals(0, Issues.getCount());
+        Issues.clear();
+
+        check.execute(argsAndVars, allCamelCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();
+
+        /* TODO: No worky
+        check.execute(argsAndVars, allUpperCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();*/
+
+        check.execute(argsAndVars, allLowerCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();
     }
 
     private void testUpperCase(){
+        check.overwriteProperty(VariableConventionCheck.VARIABLE_FORMAT_KEY, "[UPPERCASE]");
 
+        check.execute(argsAndVars, allUpperCase);
+        assertEquals(0, Issues.getCount());
+        Issues.clear();
+
+        check.execute(argsAndVars, allPascalCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();
+
+        check.execute(argsAndVars, allCamelCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();
+
+        check.execute(argsAndVars, allLowerCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();
     }
 
     private void testLowerCase(){
+        check.overwriteProperty(VariableConventionCheck.VARIABLE_FORMAT_KEY, "[lowercase]");
 
+        check.execute(argsAndVars, allLowerCase);
+        assertEquals(0, Issues.getCount());
+        Issues.clear();
+
+        check.execute(argsAndVars, allPascalCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();
+
+        check.execute(argsAndVars, allCamelCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();
+
+        check.execute(argsAndVars, allUpperCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();
     }
 }

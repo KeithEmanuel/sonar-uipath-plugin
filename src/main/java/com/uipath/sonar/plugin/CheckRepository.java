@@ -78,7 +78,7 @@ public class CheckRepository {
 
     public static List<PropertyDefinition> getAllProperties(){
         return getAllChecks().stream()
-            .map(AbstractCheck::getProperties)
+            .map(AbstractCheck::defineProperties)
             .flatMap(List::stream)
             .collect(Collectors.toList());
     }

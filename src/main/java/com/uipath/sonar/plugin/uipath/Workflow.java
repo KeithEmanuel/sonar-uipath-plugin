@@ -3,6 +3,7 @@ package com.uipath.sonar.plugin.uipath;
 import java.io.*;
 import java.net.URI;
 
+import com.google.common.io.Files;
 import com.uipath.sonar.plugin.HasInputFile;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -18,7 +19,11 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.apache.commons.io.FilenameUtils;
+import org.xml.sax.SAXException;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,88 +37,62 @@ import java.util.List;
  */
 public class Workflow implements HasInputFile {
 
-    private static final Logger LOG = Loggers.get(Workflow.class);
-    private Project project;
-    private Document xamlDocument;
-    private InputFile inputFile;
     private File file;
-    private InputStream fileStream;
-    private List<WorkflowArgument> arguments;
+    //private Path relativePath;
+    private Project project;
+    private InputFile inputFile;
+    private Document xamlDocument;
+    private ArrayList workflowArguments;
 
-
-    public Workflow(Project project, InputFile inputFile) throws IOException, DocumentException {
+    public Workflow(Project project, File file) throws DocumentException {
         this.project = project;
-        this.inputFile = inputFile;
-        fileStream = new FileInputStream(file);
-
-        Initialize();
-    }
-
-    public Workflow(File file) throws IOException, DocumentException {
         this.file = file;
-        fileStream = new FileInputStream(file);
+        //this.relativePath = file.toURI()
 
-        Initialize();
-    }
-
-    private void Initialize() throws IOException, DocumentException {
-        LoadXamlDocument();
-        LoadArguments();
-    }
-
-    private void LoadXamlDocument() throws IOException, DocumentException {
+        // Create the xaml document
         SAXReader saxReader = new SAXReader();
-
-        xamlDocument = saxReader.read(fileStream);
+        xamlDocument = saxReader.read(file);
         xamlDocument.getRootElement().addNamespace("xa","http://schemas.microsoft.com/netfx/2009/xaml/activities");
+
+        // Parse and set the workflow arguments
+        workflowArguments = WorkflowArgument.LoadFromWorkflow(this);
+
     }
 
-    private void LoadArguments(){
-        this.arguments = WorkflowArgument.LoadFromWorkflow(this);
+    public Workflow(Project project, File file, InputFile inputFile) throws DocumentException {
+        this(project, file);
+        this.inputFile = inputFile;
     }
 
-    public String getName(){
-        if(inputFile != null){
-            return FilenameUtils.getName(inputFile.uri().getPath());
-        }
-        else {
-            return FilenameUtils.getName(file.getName());
-        }
-    }
-
-    public Project getProject(){
-        return project;
+    public List<WorkflowArgument> getArguments(){
+        return workflowArguments;
     }
 
     public Document getXamlDocument(){
         return xamlDocument;
     }
 
-    public List<WorkflowArgument> getArguments(){
-        return arguments;
+    public Project getProject(){
+        return project;
     }
 
-    public InputFile getInputFile(){ return inputFile; }
-
-    public URI getUri(){
-        return getInputFile().uri();
+    public Path getPath(){
+        return file.toPath();
     }
 
-    /*public void reportIssue(RuleKey ruleKey, String message){
+    public String getName(){
+        return Files.getNameWithoutExtension(file.getName());
+    }
 
-        NewIssue issue = project.getSensorContext().newIssue()
-            .forRule(ruleKey);
-        NewIssueLocation location = issue.newLocation();
-        location
-            .on(inputFile)
-            .message(message);
-        issue.at(location);
+    public String getFileName(){
+        return file.getName();
+    }
 
-        issue.save();
-    }*/
+    public boolean hasInputFile(){
+        return inputFile != null;
+    }
 
-    @Override
-    public String toString(){
-        return getName();
+    public InputFile getInputFile(){
+        return inputFile;
     }
 }

@@ -1,21 +1,20 @@
 package com.uipath.sonar.plugin;
 
 import com.uipath.sonar.plugin.settings.UiPathLanguageProperties;
-import com.uipath.sonar.plugin.uipath.Workflow;
 import com.uipath.sonar.plugin.uipath.Project;
+import com.uipath.sonar.plugin.uipath.Workflow;
 import org.dom4j.XPathException;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.postjob.PostJobContext;
-import org.sonar.api.batch.rule.CheckFactory;
-import org.sonar.api.batch.rule.Checks;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+
+import java.io.File;
 
 /**
  * UiPathSensor is the main component for scanning UiPath projects. The sensor identifies the files to analyze
@@ -56,41 +55,47 @@ public class UiPathSensor implements Sensor{
 
         LOG.info("UiPathSensor is running...");
 
-        Project project = Project.FromSensorContext(this, context);
+        try{
+            File directory = new File(getProjectJson().uri().resolve(".."));
+            Project project = new Project(directory, this, context);
 
-        LOG.info("Project: " + project.getInputFile().uri().toString());
+            LOG.info("Project: " + project.getInputFile().uri().toString());
 
-        for(AbstractProjectCheck check : CheckRepository.getProjectChecks()){
-            try{
-                LOG.info(String.format("Executing check %s...", check.getRule().name()));
-                check.execute(project);
-            }
-            catch (Exception e){
-                LOG.error("Error when executing check '" + check.getRule().name() + "'", e);
-            }
-        }
-
-        for(Workflow workflow : project.getWorkflows()){
-
-            LOG.info("Checking workflow: " + workflow.getName());
-
-            for (AbstractWorkflowCheck check : CheckRepository.getWorkflowChecks()){
-                try {
+            for(AbstractProjectCheck check : CheckRepository.getProjectChecks()){
+                try{
                     LOG.info(String.format("Executing check %s...", check.getRule().name()));
-                    check.execute(project, workflow);
-                }
-                catch (XPathException e){
-                    // This will catch errors where XPath queries are ran in a document that doesn't contain a namespace used in the XPath query.
-                    // IE: Exception: XPath expression uses unbound namespace prefix ui
-                    LOG.warn("Encountered XPath exception when executing check '" + check.getRule().name() + "'. This may or may not be an issue.", e);
+                    check.execute(project);
                 }
                 catch (Exception e){
                     LOG.error("Error when executing check '" + check.getRule().name() + "'", e);
                 }
             }
-        }
 
-        LOG.info("UiPathSensor finished!");
+            for(Workflow workflow : project.getWorkflows()){
+
+                LOG.info("Checking workflow: " + workflow.getName());
+
+                for (AbstractWorkflowCheck check : CheckRepository.getWorkflowChecks()){
+                    try {
+                        LOG.info(String.format("Executing check %s...", check.getRule().name()));
+                        check.execute(project, workflow);
+                    }
+                    catch (XPathException e){
+                        // This will catch errors where XPath queries are ran in a document that doesn't contain a namespace used in the XPath query.
+                        // IE: Exception: XPath expression uses unbound namespace prefix ui
+                        LOG.warn("Encountered XPath exception when executing check '" + check.getRule().name() + "'. This may or may not be an issue.", e);
+                    }
+                    catch (Exception e){
+                        LOG.error("Error when executing check '" + check.getRule().name() + "'", e);
+                    }
+                }
+            }
+
+            LOG.info("UiPathSensor finished!");
+        }
+        catch (Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 
     private void loadSettings(SensorContext context){

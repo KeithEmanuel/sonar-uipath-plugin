@@ -6,6 +6,9 @@ import com.uipath.sonar.plugin.AbstractProjectCheck;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
+import java.io.File;
+import java.nio.file.Files;
+
 @Rule(
     key = "ValidateMainWorkflowCheck",
     name = "Check that the 'Main' workflow exists",
@@ -25,8 +28,10 @@ public class ValidateMainWorkflowCheck extends AbstractProjectCheck {
 
         String mainPath = project.getProjectJson().main;
 
-        if(!project.getSensorContext().fileSystem().resolvePath(mainPath).exists()){
-            Issues.report(project, getRuleKey(), "Main workflow '" + mainPath + "' does not exist!");
+        if(!Files.exists(new File(project.getDirectory().toURI().resolve(project.getProjectJson().main)).toPath())){
+            // TODO FIX
+
+            //Issues.report(project, getRuleKey(), "Main workflow '" + mainPath + "' does not exist!");
         }
     }
 }

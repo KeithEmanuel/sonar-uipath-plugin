@@ -34,7 +34,7 @@ public class WorkflowArgument {
         this.direction = direction;
     }
 
-    public static List<WorkflowArgument> LoadFromWorkflow(Workflow workflow){
+    public static ArrayList<WorkflowArgument> LoadFromWorkflow(Workflow workflow){
 
         LOG.debug("Loading workflow " + workflow.getName());
 
@@ -64,7 +64,6 @@ public class WorkflowArgument {
             Matcher matcher = pattern.matcher(rawType);
 
             if (matcher.find()) {
-                System.out.println("Full match: " + matcher.group(0));
                 String rawArgType = matcher.group("type");
                 Direction direction = Direction.valueOf(matcher.group("direction"));
 
