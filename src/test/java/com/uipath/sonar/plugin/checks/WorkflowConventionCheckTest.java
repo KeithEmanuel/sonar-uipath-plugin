@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
 public class WorkflowConventionCheckTest {
 
     private Project project;
+    private Workflow main;
     private Workflow ok1;
     private Workflow ok2;
     private Workflow ok3;
@@ -22,7 +23,8 @@ public class WorkflowConventionCheckTest {
 
     @Before
     public void setUp() throws Exception {
-        project = LoadProject.workflowConventions();
+        project = LoadProject.withPath("WorkflowConventions");
+        main = project.getWorkflowNamed("Main").get();
         ok1 = project.getWorkflowNamed("_Ok").get();
         ok2 = project.getWorkflowNamed("AlsoOk").get();
         ok3 = project.getWorkflowNamed("Still_Ok").get();
@@ -35,6 +37,7 @@ public class WorkflowConventionCheckTest {
     public void execute() {
         WorkflowConventionCheck check = new WorkflowConventionCheck();
 
+        check.executeIgnoreCommonExceptions(project, main);
         check.execute(project, ok1);
         check.execute(project, ok2);
         check.execute(project, ok3);

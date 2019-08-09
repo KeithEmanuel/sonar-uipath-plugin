@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 public class VariableConventionCheck extends AbstractWorkflowCheck {
 
     public static final String VARIABLE_FORMAT_KEY = "uipath.check.variableconventioncheck.format";
-    private static final String VARIABLE_FORMAT_DEFAULT_VALUE = "[camelCase]";
+    private static final String VARIABLE_FORMAT_DEFAULT_VALUE = "^[a-z][\\w\\d]+$";
 
     public VariableConventionCheck(){
         super();
@@ -46,7 +46,7 @@ public class VariableConventionCheck extends AbstractWorkflowCheck {
             PropertyDefinition.builder(VARIABLE_FORMAT_KEY)
                 .defaultValue(VARIABLE_FORMAT_DEFAULT_VALUE)
                 .name("Variable Convention Format")
-                .description("Naming convention format for variables. Accepts [PascalCase], [camelCase], [UPPERCASE], and [lowercase], case sensitive.")
+                .description("Naming convention format for variables, defined as a regular expression.")
                 .onQualifiers(Qualifiers.PROJECT)
                 .build());
     }
@@ -56,7 +56,7 @@ public class VariableConventionCheck extends AbstractWorkflowCheck {
 
         List<Node> nodes = workflow.getXamlDocument().selectNodes("//xa:Variable");
 
-        Pattern formatPattern = Utils.createRegexPatternForConvention(getVariableFormat());
+        Pattern formatPattern = Pattern.compile(getVariableFormat());
 
         for(Node node : nodes){
            Element element = (Element)node;
@@ -64,7 +64,7 @@ public class VariableConventionCheck extends AbstractWorkflowCheck {
            String name = element.attributeValue("Name");
 
            if(!formatPattern.matcher(name).find()){
-               Issues.report(workflow, getRuleKey(), "Variable '" + name + "' does not follow convention. Variables should match the format '" + getVariableFormat() + "'.");
+               reportIssue(workflow, "Variable '" + name + "' does not follow convention. Variables should match the format '" + getVariableFormat() + "'.");
            }
         }
     }

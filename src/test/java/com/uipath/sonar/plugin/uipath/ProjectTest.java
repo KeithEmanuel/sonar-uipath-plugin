@@ -16,7 +16,7 @@ public class ProjectTest {
 
     @Before
     public void setUp() throws Exception {
-        argsAndVars = LoadProject.argsAndVars();
+        argsAndVars = LoadProject.withPath("ArgsAndVars");
     }
 
     @After
@@ -25,7 +25,7 @@ public class ProjectTest {
 
     @Test
     public void getWorkflows() {
-        Project argsAndVars = LoadProject.argsAndVars();
+        Project argsAndVars = LoadProject.withPath("ArgsAndVars");
         assertEquals(5, argsAndVars.getWorkflows().size());
     }
 

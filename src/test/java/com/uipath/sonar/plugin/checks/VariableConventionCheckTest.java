@@ -28,6 +28,7 @@ public class VariableConventionCheckTest {
 
     private VariableConventionCheck check = new VariableConventionCheck();
     private Project argsAndVars;
+    private Workflow main;
     private Workflow allCamelCase;
     private Workflow allPascalCase;
     private Workflow allUpperCase;
@@ -35,7 +36,8 @@ public class VariableConventionCheckTest {
 
     @Before
     public void setUp() throws Exception {
-        argsAndVars = LoadProject.argsAndVars();
+        argsAndVars = LoadProject.withPath("ArgsAndVars");
+        main = argsAndVars.getWorkflowNamed("Main").get();
         allCamelCase = argsAndVars.getWorkflowNamed("allCamelCase").get();
         allPascalCase = argsAndVars.getWorkflowNamed("AllPascalCase").get();
         allUpperCase = argsAndVars.getWorkflowNamed("ALLUPPERCASE").get();
@@ -45,13 +47,15 @@ public class VariableConventionCheckTest {
     @Test
     public void execute() throws IOException, DocumentException {
         testCamelCase();
-        testPascalCase();
-        testUpperCase();
-        testLowerCase();
+        //testPascalCase();
+        //testUpperCase();
+        //testLowerCase();
     }
 
     private void testCamelCase() throws IOException, DocumentException {
-        check.overwriteProperty(VariableConventionCheck.VARIABLE_FORMAT_KEY, "[camelCase]");
+        //check.overwriteProperty(VariableConventionCheck.VARIABLE_FORMAT_KEY, "[camelCase]");
+        check.executeIgnoreCommonExceptions(argsAndVars, main);
+        assertEquals(0, Issues.getCount());
 
         check.execute(argsAndVars, allCamelCase);
         assertEquals(0, Issues.getCount());

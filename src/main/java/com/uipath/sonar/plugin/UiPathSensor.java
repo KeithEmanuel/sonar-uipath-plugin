@@ -15,6 +15,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
 import java.io.File;
+import java.util.Optional;
 
 /**
  * UiPathSensor is the main component for scanning UiPath projects. The sensor identifies the files to analyze
@@ -56,7 +57,7 @@ public class UiPathSensor implements Sensor{
         LOG.info("UiPathSensor is running...");
 
         try{
-            File directory = new File(getProjectJson().uri().resolve(".."));
+            File directory = new File(getProjectJson().uri()).getParentFile();
             Project project = new Project(directory, this, context);
 
             LOG.info("Project: " + project.getInputFile().uri().toString());
@@ -134,8 +135,18 @@ public class UiPathSensor implements Sensor{
         return fileSystem.hasFiles(workflowPredicate);
     }
 
-    public Iterable<InputFile> getWorkflows(){
+    public Iterable<InputFile> getWorkflowInputFiles(){
         return fileSystem.inputFiles(workflowPredicate);
+    }
+
+    public Optional<InputFile> getInputFileForWorkflow(File file) {
+        for(InputFile inputFile : getWorkflowInputFiles()){
+            if(inputFile.uri().equals(file.toURI())){
+                return Optional.of(inputFile);
+            }
+        }
+
+        return Optional.empty();
     }
 
     @Override

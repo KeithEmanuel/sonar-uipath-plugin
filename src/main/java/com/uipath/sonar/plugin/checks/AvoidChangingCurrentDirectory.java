@@ -45,7 +45,7 @@ public class AvoidChangingCurrentDirectory extends AbstractWorkflowCheck {
            String text = element.getText();
 
            if(text.equals("[Environment.CurrentDirectory]")){
-               Issues.report(workflow, getRuleKey(), "Altering the Environment.CurrentDirectory property should be avoided.");
+               reportIssue(workflow, "Altering the Environment.CurrentDirectory property should be avoided.");
            }
         }
     }

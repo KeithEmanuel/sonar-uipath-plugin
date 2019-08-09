@@ -20,7 +20,7 @@ import java.util.List;
     description =  "Checks that the path of an invoked workflow is relative and contained in the project directory.",
     status = "BETA",
     priority = Priority.MAJOR,
-    tags = {"activity"}
+    tags = {"activity", "bug"}
 )
 public class InvokeWorkflowFilePathCheck extends AbstractWorkflowCheck {
 
@@ -45,11 +45,11 @@ public class InvokeWorkflowFilePathCheck extends AbstractWorkflowCheck {
                 URI uri = Utils.getURI(workflowFilename);
 
                 if(uri.isAbsolute()){
-                    Issues.report(workflow, getRuleKey(), "The path the workflow file should be relative and contained in the project.");
+                    reportIssue(workflow, "The path the workflow file should be relative and contained in the project.");
                 }
             }
             catch(URISyntaxException e){
-                Issues.report(workflow, getRuleKey(), "Could not parse path of '\" + workflowFilename + \"'. Ensure that it is valid.");
+                reportIssue(workflow, "Could not parse path of '\" + workflowFilename + \"'. Ensure that it is valid.");
             }
         }
     }

@@ -20,7 +20,7 @@ import java.util.List;
     description =  "Checks that an invoked workflow referenced in an 'Invoke Workflow File' activity exists at the specified path.",
     status = "BETA",
     priority = Priority.BLOCKER,
-    tags = {"activity"}
+    tags = {"activity", "bug"}
 )
 public class InvokeWorkflowFileExistsCheck extends AbstractWorkflowCheck {
 
@@ -48,7 +48,7 @@ public class InvokeWorkflowFileExistsCheck extends AbstractWorkflowCheck {
             if(!workflowExists){
                 String displayName = element.attributeValue("DisplayName");
 
-                Issues.report(workflow, getRuleKey(), "Invoked workflow '" + workflowFilename + "' for activity '" + displayName +"' does not exist.");
+                reportIssue(workflow, "Invoked workflow '" + workflowFilename + "' for activity '" + displayName +"' does not exist.");
             }
         }
     }

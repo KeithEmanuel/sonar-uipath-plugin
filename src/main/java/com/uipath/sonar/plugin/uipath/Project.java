@@ -58,7 +58,6 @@ public class Project implements HasInputFile {
         }
 
         this.directory = directory;
-        this.workflows = new ArrayList<>();
 
         try{
             File projectJsonFile = Arrays.stream(directory.listFiles()).filter(f -> f.getName().equals("project.json")).findFirst().get();
@@ -69,6 +68,8 @@ public class Project implements HasInputFile {
             throw new IllegalArgumentException("Could not find project.json in the given directory '" + directory.toString() + "'.", ex);
         }
 
+        this.workflows = new ArrayList<>();
+
         for(File xamlFile : FileUtils.listFiles(directory, new String[] {"xaml"}, true)){
             workflows.add(new Workflow(this, xamlFile));
         }
@@ -78,6 +79,11 @@ public class Project implements HasInputFile {
         this(directory);
         this.sensor = sensor;
         this.sensorContext = sensorContext;
+        inputFile = sensor.getProjectJson();
+
+        for(Workflow workflow : getWorkflows()){
+            workflow.setInputFile(sensor.getInputFileForWorkflow(workflow.getFile()).get());
+        }
     }
 
     public ArrayList<Workflow> getWorkflows(){

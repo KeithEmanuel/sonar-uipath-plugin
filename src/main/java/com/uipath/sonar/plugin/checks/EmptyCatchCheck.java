@@ -28,19 +28,20 @@ public class EmptyCatchCheck extends AbstractWorkflowCheck {
 
     public void execute(Project project, Workflow workflow){
         List<Node> nodes = workflow.getXamlDocument().selectNodes("//xa:TryCatch");
-
         for(Node tryCatchNode : nodes){
             Element tryCatchElement = (Element)tryCatchNode;
 
             String displayName = tryCatchElement.attributeValue("DisplayName");
 
-            for(Node activityActionNode : tryCatchElement.selectNodes("TryCatch.Catches/Catch/ActivityAction")){
+            System.out.println(tryCatchElement.selectNodes("//TryCatch.Catches/Catch/ActivityAction").size());
+
+            for(Node activityActionNode : tryCatchElement.selectNodes("//TryCatch.Catches/Catch/ActivityAction")){
                 Element activityActionElement = (Element)activityActionNode;
 
                 String exceptionType = activityActionElement.attributeValue("x:TypeArguments");
-
+                System.out.println(activityActionElement.elements().size());
                 if(activityActionElement.elements().size() < 2){
-                    Issues.report(workflow, getRuleKey(), "Catch block of '" + displayName + "', catch block for exception type '" + exceptionType +"' should not be empty.");
+                    reportIssue(workflow, "Catch block of '" + displayName + "', catch block for exception type '" + exceptionType +"' should not be empty.");
                 }
             }
         }

@@ -25,9 +25,11 @@ public class CheckRepository {
             new InvokeWorkflowFilePathCheck(),
             new ArgumentConventionCheck(),
             new VariableConventionCheck(),
+            new WorkflowConventionCheck(),
             new WorkflowAnnotationCheck(),
             new AvoidGetPasswordCheck(),
-            new AvoidChangingCurrentDirectory()
+            new AvoidChangingCurrentDirectory(),
+            new EmptyCatchCheck()
         );
 
     private static final List<AbstractProjectCheck> PROJECT_CHECKS =

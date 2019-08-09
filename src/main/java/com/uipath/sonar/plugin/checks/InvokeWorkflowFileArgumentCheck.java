@@ -13,16 +13,17 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+// TODO, make this check two way (extra or missing args)
 @Rule(
     key = "InvokeWorkflowFileArgumentCheck",
     name = "Check 'Invoke Workflow File' arguments match",
     description =  "Verifies that the arguments of Invoke Workflow activities are valid.",
     status = "BETA",
     priority = Priority.CRITICAL,
-    tags = {"activity"}
+    tags = {"activity", "bug"}
 )
 public class InvokeWorkflowFileArgumentCheck extends AbstractWorkflowCheck {
 
@@ -72,12 +73,17 @@ public class InvokeWorkflowFileArgumentCheck extends AbstractWorkflowCheck {
                         if(!hasMatch){
                             String displayName = element.attributeValue("DisplayName");
 
-                            Issues.report(workflow, getRuleKey(), "Invalid Invocation of '" + workflowFilename
-                                + "' in activity '" + displayName + "'. Supplied argument '" + name + "' does not exist.");
+                            reportIssue(workflow,
+                                "Invalid Invocation of '" + workflowFilename
+                                    + "' in activity '" + displayName + "'. Supplied argument '" + name + "' does not exist.");
                         }
                     }
                 }
             }
         }
+    }
+
+    public ArrayList<WorkflowArgument> getArgsFromInvokedWorkflow(){
+
     }
 }

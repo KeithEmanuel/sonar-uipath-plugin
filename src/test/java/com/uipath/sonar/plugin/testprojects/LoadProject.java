@@ -21,11 +21,4 @@ public class LoadProject {
            throw new RuntimeException(ex);
        }
     }
-
-    public static Project argsAndVars() {
-        return withPath("ArgsAndVars");
-    }
-    public static Project workflowConventions() {
-        return withPath("WorkflowConventions");
-    }
 }

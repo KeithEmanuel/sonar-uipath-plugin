@@ -33,11 +33,11 @@ public class ArgumentConventionCheck extends AbstractWorkflowCheck {
     private static final Logger LOG = Loggers.get(ArgumentConventionCheck.class);
 
     private static final String IN_ARGUMENT_FORMAT_KEY = "uipath.check.argumentconventioncheck.inargformat";
-    private static final String IN_ARGUMENT_FORMAT_DEFAULT_VALUE = "in_[PascalCase]";
+    private static final String IN_ARGUMENT_FORMAT_DEFAULT_VALUE = "^in_[A-Z][\\w\\d]+$";
     private static final String OUT_ARGUMENT_FORMAT_KEY = "uipath.check.argumentconventioncheck.outargformat";
-    private static final String OUT_ARGUMENT_FORMAT_DEFAULT_VALUE = "out_[PascalCase]";
+    private static final String OUT_ARGUMENT_FORMAT_DEFAULT_VALUE = "^out_[A-Z][\\w\\d]+$";
     private static final String IO_ARGUMENT_FORMAT_KEY = "uipath.check.argumentconventioncheck.ioargformat";
-    private static final String IO_ARGUMENT_FORMAT_DEFAULT_VALUE = "io_[PascalCase]";
+    private static final String IO_ARGUMENT_FORMAT_DEFAULT_VALUE = "^io_[A-Z][\\w\\d]+$";
 
     public ArgumentConventionCheck(){
         super();
@@ -50,19 +50,19 @@ public class ArgumentConventionCheck extends AbstractWorkflowCheck {
             PropertyDefinition.builder(IN_ARGUMENT_FORMAT_KEY)
                 .defaultValue(IN_ARGUMENT_FORMAT_DEFAULT_VALUE)
                 .name("InArgument Convention Format")
-                .description("Naming convention format for input arguments. Accepts [PascalCase], [camelCase], [UPPERCASE], and [lowercase], case sensitive.")
+                .description("Naming convention format for input arguments, defined as a regular expression.")
                 .onQualifiers(Qualifiers.PROJECT)
                 .build(),
             PropertyDefinition.builder(OUT_ARGUMENT_FORMAT_KEY)
                 .defaultValue(OUT_ARGUMENT_FORMAT_DEFAULT_VALUE)
                 .name("OutArgument Convention Format")
-                .description("Naming convention format for output arguments. Accepts [PascalCase], [camelCase], [UPPERCASE], and [lowercase], case sensitive.")
+                .description("Naming convention format for output arguments, defined as a regular expression.")
                 .onQualifiers(Qualifiers.PROJECT)
                 .build(),
             PropertyDefinition.builder(IO_ARGUMENT_FORMAT_KEY)
                 .defaultValue(IO_ARGUMENT_FORMAT_DEFAULT_VALUE)
                 .name("InOutArgument Convention Format")
-                .description("Naming convention format for input/output arguments. Accepts [PascalCase], [camelCase], [UPPERCASE], and [lowercase], case sensitive.")
+                .description("Naming convention format for input/output arguments, defined as a regular expression.")
                 .onQualifiers(Qualifiers.PROJECT)
                 .build()
         );
@@ -74,20 +74,20 @@ public class ArgumentConventionCheck extends AbstractWorkflowCheck {
 
         for(WorkflowArgument arg : workflow.getArguments()) {
             String name = arg.getName();
-
+            System.out.println("testing " + arg);
             switch(arg.getDirection()){
                 case In:
-                    Pattern inPattern = Utils.createRegexPatternForConvention(getInArgFormat());
+                    Pattern inPattern = Pattern.compile(getInArgFormat());
                     if(!inPattern.matcher(name).find())
                         reportIssue(workflow, arg);
                     break;
                 case Out:
-                    Pattern outPattern = Utils.createRegexPatternForConvention(getOutArgFormat());
+                    Pattern outPattern = Pattern.compile(getOutArgFormat());
                     if(!outPattern.matcher(name).find())
                         reportIssue(workflow, arg);
                     break;
                 case InOut:
-                    Pattern inOutPattern = Utils.createRegexPatternForConvention(getInOutArgFormat());
+                    Pattern inOutPattern = Pattern.compile(getInOutArgFormat());
                     if(!inOutPattern.matcher(name).find())
                         reportIssue(workflow, arg);
                     break;
@@ -96,14 +96,15 @@ public class ArgumentConventionCheck extends AbstractWorkflowCheck {
     }
 
     private void reportIssue(Workflow workflow, WorkflowArgument arg){
-
+        System.out.println("BADBADBAD");
         String label = arg.getDirection() == Direction.InOut ? "In/Out" : arg.getDirection().toString();
 
-        Issues.report(workflow, getRuleKey(), "Argument '" + arg.getName()
-            + "' does not follow naming convention. "
-            + label + " arguments should follow the convention '"
-            + getArgFormat(arg.getDirection())
-            + "'.");
+        reportIssue(workflow,
+            "Argument '" + arg.getName()
+                + "' does not follow naming convention. "
+                + label + " arguments should follow the convention '"
+                + getArgFormat(arg.getDirection())
+                + "'.");
     }
 
     public String getInArgFormat(){

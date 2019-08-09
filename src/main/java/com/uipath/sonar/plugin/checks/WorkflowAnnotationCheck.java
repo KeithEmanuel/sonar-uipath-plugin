@@ -5,10 +5,7 @@ import com.uipath.sonar.plugin.Issues;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import com.uipath.sonar.plugin.uipath.Project;
 import org.apache.commons.lang.StringUtils;
-import org.dom4j.Attribute;
-import org.dom4j.Document;
-import org.dom4j.Element;
-import org.dom4j.Node;
+import org.dom4j.*;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Priority;
@@ -37,11 +34,24 @@ public class WorkflowAnnotationCheck extends AbstractWorkflowCheck {
     @Override
     public void execute(Project project, Workflow workflow){
 
-        List<Node> nodes = workflow.getXamlDocument().selectNodes("/xa:Activity/*[@sap2010:Annotation.AnnotationText]");
-        LOG.debug("SIZE: " + nodes.size());
+        try{
+            List<Node> nodes = workflow.getXamlDocument().selectNodes("/xa:Activity/*[@sap2010:Annotation.AnnotationText]");
+            LOG.debug("SIZE: " + nodes.size());
 
-        if(nodes.size() == 0){
-            Issues.report(workflow, getRuleKey(), "Workflow '" + workflow.getName() + "' should have a top level annotation.");
+            if(nodes.size() == 0){
+                reportIssue(workflow, "Workflow '" + workflow.getName() + "' should have a top level annotation.");
+            }
         }
+        catch (XPathException e) {
+            // This will catch errors where XPath queries are ran in a document that doesn't contain a namespace used in the XPath query.
+            if(e.getMessage().contains("XPath expression uses unbound namespace prefix")){
+                // This means that there is no top level annotation.
+                reportIssue(workflow, "Workflow '" + workflow.getName() + "' should have a top level annotation.");
+            }
+            else {
+                throw e;
+            }
+        }
+
     }
 }

@@ -76,6 +76,8 @@ public class Workflow implements HasInputFile {
         return project;
     }
 
+    public File getFile() { return file; }
+
     public Path getPath(){
         return file.toPath();
     }
@@ -95,4 +97,6 @@ public class Workflow implements HasInputFile {
     public InputFile getInputFile(){
         return inputFile;
     }
+
+    public void setInputFile(InputFile inputFile){ this.inputFile = inputFile; }
 }

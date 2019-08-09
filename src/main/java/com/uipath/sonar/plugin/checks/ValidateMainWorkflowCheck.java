@@ -15,7 +15,7 @@ import java.nio.file.Files;
     description =  "Verifies that the Main workflow in project.json exists and is valid.",
     status = "BETA",
     priority = Priority.BLOCKER,
-    tags = {"project"}
+    tags = {"project", "bug"}
 )
 public class ValidateMainWorkflowCheck extends AbstractProjectCheck {
 
@@ -29,9 +29,7 @@ public class ValidateMainWorkflowCheck extends AbstractProjectCheck {
         String mainPath = project.getProjectJson().main;
 
         if(!Files.exists(new File(project.getDirectory().toURI().resolve(project.getProjectJson().main)).toPath())){
-            // TODO FIX
-
-            //Issues.report(project, getRuleKey(), "Main workflow '" + mainPath + "' does not exist!");
+            reportIssue(project, "Main workflow '" + mainPath + "' does not exist!");
         }
     }
 }

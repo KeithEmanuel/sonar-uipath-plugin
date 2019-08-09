@@ -993,9 +993,9 @@
     "restore": {
       "projectUniqueName": "ArgsAndVars",
       "projectName": "ArgsAndVars",
-      "projectPath": "C:\\Users\\Keith Emanuel\\Repositories\\UiPathSonarQubePlugin\\src\\test\\java\\com\\uipath\\sonar\\plugin\\checks\\TestProjects\\ArgsAndVars\\.local",
+      "projectPath": "C:\\Users\\Keith Emanuel\\Repositories\\sonar-uipath-plugin\\src\\test\\java\\com\\uipath\\sonar\\plugin\\testprojects\\ArgsAndVars\\.local",
       "packagesPath": "C:\\Users\\Keith Emanuel\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Keith Emanuel\\Repositories\\UiPathSonarQubePlugin\\src\\test\\java\\com\\uipath\\sonar\\plugin\\checks\\TestProjects\\ArgsAndVars\\.local"
+      "outputPath": "C:\\Users\\Keith Emanuel\\Repositories\\sonar-uipath-plugin\\src\\test\\java\\com\\uipath\\sonar\\plugin\\testprojects\\ArgsAndVars\\.local"
     },
     "frameworks": {
       "net461": {

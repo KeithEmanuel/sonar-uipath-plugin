@@ -15,7 +15,7 @@ public class WorkflowTest {
 
     @Before
     public void setUp() throws Exception {
-        argsAndVars = LoadProject.argsAndVars();
+        argsAndVars = LoadProject.withPath("ArgsAndVars");
         allCamelCase = argsAndVars.getWorkflowNamed("allCamelCase").get();
     }
 

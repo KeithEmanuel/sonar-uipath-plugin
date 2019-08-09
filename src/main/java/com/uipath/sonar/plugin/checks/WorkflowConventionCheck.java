@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Rule(
-    key = "VariableConventionCheck",
-    name = "Variables should follow naming convention",
+    key = "WorkflowConventionCheck",
+    name = "Workflows should follow naming convention",
     description =  "Checks that workflow variables follow naming conventions.",
     status = "BETA",
     priority = Priority.MINOR,
@@ -24,9 +24,9 @@ import java.util.regex.Pattern;
 public class WorkflowConventionCheck extends AbstractWorkflowCheck {
 
     public static final String VALID_FORMAT_KEY = "uipath.check.workflowconventioncheck.format";
-    private static final String VALID_FORMAT_DEFAULT_VALUE = "^[A-Z_][\\w\\d_]*$";
+    private static final String VALID_FORMAT_DEFAULT_VALUE = "^[A-Z\\d_][\\d\\w_]*$";
     public static final String INVALID_FORMAT_KEY = "uipath.check.workflowconventioncheck.invalidformat";
-    private static final String INVALID_FORMAT_DEFAULT_VALUE = ".*_[a-z]";
+    private static final String INVALID_FORMAT_DEFAULT_VALUE = "^.*(_|\\d)[a-z].*$";
 
     public WorkflowConventionCheck(){
         super();

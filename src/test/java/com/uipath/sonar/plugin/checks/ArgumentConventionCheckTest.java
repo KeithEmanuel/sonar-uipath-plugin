@@ -11,8 +11,9 @@ import static org.junit.Assert.*;
 
 public class ArgumentConventionCheckTest {
 
-    private ArgumentConventionCheck check = new ArgumentConventionCheck ();
+    private ArgumentConventionCheck check;
     private Project argsAndVars;
+    private Workflow main;
     private Workflow allCamelCase;
     private Workflow allPascalCase;
     private Workflow allUpperCase;
@@ -20,7 +21,9 @@ public class ArgumentConventionCheckTest {
 
     @Before
     public void setUp() throws Exception {
-        argsAndVars = LoadProject.argsAndVars();
+        check = new ArgumentConventionCheck();
+        argsAndVars = LoadProject.withPath("ArgsAndVars");
+        main = argsAndVars.getWorkflowNamed("Main").get();
         allCamelCase = argsAndVars.getWorkflowNamed("allCamelCase").get();
         allPascalCase = argsAndVars.getWorkflowNamed("AllPascalCase").get();
         allUpperCase = argsAndVars.getWorkflowNamed("ALLUPPERCASE").get();
@@ -29,27 +32,24 @@ public class ArgumentConventionCheckTest {
 
     @Test
     public void execute() {
-        testPascalCase();
-        testCamelCase();
-        testUpperCase();
-        testLowerCase();
-    }
+        check.executeIgnoreCommonExceptions(argsAndVars, main);
+        assertEquals(0, Issues.getCount());
+        Issues.clear();
 
-    private void testPascalCase(){
         check.execute(argsAndVars, allPascalCase);
         assertEquals(0, Issues.getCount());
         Issues.clear();
-    }
 
-    private void testCamelCase(){
+        check.execute(argsAndVars, allCamelCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();
 
-    }
+        /*check.execute(argsAndVars, allUpperCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();*/
 
-    private void testUpperCase(){
-
-    }
-
-    private void testLowerCase(){
-
+        check.execute(argsAndVars, allLowerCase);
+        assertTrue(Issues.getCount() > 0);
+        Issues.clear();
     }
 }

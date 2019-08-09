@@ -34,38 +34,4 @@ public final class Utils {
     public static boolean nodeIsCode(String value){
         return value.startsWith("[")  && value.endsWith("]");
     }
-
-    // Regex patterns for conventions
-    public static final String CAMELCASE_IDENTIFIER = "[camelCase]";
-    private static final String CAMELCASE_PATTERN = "^[a-z][\\w\\d]+$";
-    public static final String PASCALCASE_IDENTIFIER = "[PascalCase]";
-    private static final String PASCALCASE_PATTERN = "^[A-Z][\\w\\d]+$";
-    public static final String UPPERCASE_IDENTIFIER = "[UPPERCASE]";
-    private static final String UPPERCASE_PATTERN = "^[A-Z\\d]+$";
-    public static final String LOWER_IDENTIFIER = "[lowercase]";
-    private static final String LOWERCASE_PATTERN = "^[a-z\\d]+$";
-
-    /**
-     * Generates a regex pattern to match the specified convention.
-     * @param convention The convention to match.
-     * @return A regex pattern that matches the convention.
-     */
-    public static Pattern createRegexPatternForConvention(String convention){
-        return Pattern.compile(
-            convention
-                .replace(CAMELCASE_IDENTIFIER, CAMELCASE_PATTERN)
-                .replace(PASCALCASE_IDENTIFIER, PASCALCASE_PATTERN)
-                .replace(UPPERCASE_IDENTIFIER, UPPERCASE_PATTERN)
-                .replace(LOWER_IDENTIFIER, LOWERCASE_PATTERN));
-    }
-
-    /**
-     * Checks that a string matches the specified convention.
-     * @param string The string to test
-     * @param convention The convention to use for the test
-     * @return True if the string follows the convention, otherwise False. Works with '[camelCase]', '[PascalCase]', '[UPPERCASE]', and '[lowercase]' magic strings.
-     */
-    public static boolean stringFollowsConvention(String string, String convention){
-        return createRegexPatternForConvention(convention).matcher(string).find();
-    }
 }
