@@ -1,7 +1,6 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
-import com.uipath.sonar.plugin.Issues;
 import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import org.sonar.api.config.PropertyDefinition;

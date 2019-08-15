@@ -1,6 +1,5 @@
 package com.uipath.sonar.plugin;
 
-import com.uipath.sonar.plugin.settings.UiPathLanguageProperties;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.rule.RuleKey;
@@ -9,9 +8,9 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ArrayList;
 
 /**
  * AbstractCheck is the base class for AbstractProjectCheck and AbstractWorkflowCheck.

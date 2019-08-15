@@ -1,19 +1,12 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
-import com.uipath.sonar.plugin.Issues;
 import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.uipath.Workflow;
-import com.uipath.sonar.plugin.uipath.WorkflowArgument;
-import com.uipath.sonar.plugin.uipath.WorkflowArgument.Direction;
 import org.dom4j.Node;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
-import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.List;
 
 @Rule(

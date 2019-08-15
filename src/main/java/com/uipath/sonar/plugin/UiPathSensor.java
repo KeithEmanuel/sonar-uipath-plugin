@@ -49,20 +49,20 @@ public class UiPathSensor implements Sensor{
     @Override
     public void execute(SensorContext context) {
 
-        LOG.info("Configuring UiPathSensor...");
-
-        loadSettings(context);
-        configure(context);
-
-        LOG.info("UiPathSensor is running...");
-
         try{
+            LOG.info("Configuring UiPathSensor...");
+
+            loadSettings(context);
+            configure(context);
+
+            LOG.info("UiPathSensor is running...");
+
             File directory = new File(getProjectJson().uri()).getParentFile();
             Project project = new Project(directory, this, context);
 
             LOG.info("Project: " + project.getInputFile().uri().toString());
 
-            for(AbstractProjectCheck check : CheckRepository.getProjectChecks()){
+            for(AbstractProjectCheck check : CheckRepository.getDefaultProjectChecks()){
                 try{
                     LOG.info(String.format("Executing check %s...", check.getRule().name()));
                     check.execute(project);
@@ -76,7 +76,7 @@ public class UiPathSensor implements Sensor{
 
                 LOG.info("Checking workflow: " + workflow.getName());
 
-                for (AbstractWorkflowCheck check : CheckRepository.getWorkflowChecks()){
+                for (AbstractWorkflowCheck check : CheckRepository.getDefaultWorkflowChecks()){
                     try {
                         LOG.info(String.format("Executing check %s...", check.getRule().name()));
                         check.execute(project, workflow);
@@ -95,7 +95,7 @@ public class UiPathSensor implements Sensor{
             LOG.info("UiPathSensor finished!");
         }
         catch (Exception ex){
-            throw new RuntimeException(ex);
+            LOG.error("Encountered error when executing UiPath Plugin. This might not be a UiPath Project.", ex);
         }
     }
 

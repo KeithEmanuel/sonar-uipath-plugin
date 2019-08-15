@@ -1,28 +1,17 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.Issues;
-import com.uipath.sonar.plugin.UiPathSensor;
 import com.uipath.sonar.plugin.testprojects.LoadProject;
 import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import org.dom4j.DocumentException;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.internal.DefaultFileSystem;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-import org.sonar.api.batch.sensor.Sensor;
-import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
-
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Paths;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class VariableConventionCheckTest {
 
@@ -47,13 +36,10 @@ public class VariableConventionCheckTest {
     @Test
     public void execute() throws IOException, DocumentException {
         testCamelCase();
-        //testPascalCase();
-        //testUpperCase();
-        //testLowerCase();
+        testPascalCase();
     }
 
     private void testCamelCase() throws IOException, DocumentException {
-        //check.overwriteProperty(VariableConventionCheck.VARIABLE_FORMAT_KEY, "[camelCase]");
         check.executeIgnoreCommonExceptions(argsAndVars, main);
         assertEquals(0, Issues.getCount());
 
@@ -76,7 +62,7 @@ public class VariableConventionCheckTest {
     }
 
     private void testPascalCase(){
-        check.overwriteProperty(VariableConventionCheck.VARIABLE_FORMAT_KEY, "[PascalCase]");
+        check.overwriteProperty(VariableConventionCheck.VARIABLE_FORMAT_KEY, "^[A-Z][\\w\\d]*$");
 
         check.execute(argsAndVars, allPascalCase);
         assertEquals(0, Issues.getCount());
@@ -86,52 +72,12 @@ public class VariableConventionCheckTest {
         assertTrue(Issues.getCount() > 0);
         Issues.clear();
 
-        /* TODO: No worky
+        /* Commenting out - Uppercase will validate as PascalCase
         check.execute(argsAndVars, allUpperCase);
         assertTrue(Issues.getCount() > 0);
         Issues.clear();*/
 
         check.execute(argsAndVars, allLowerCase);
-        assertTrue(Issues.getCount() > 0);
-        Issues.clear();
-    }
-
-    private void testUpperCase(){
-        check.overwriteProperty(VariableConventionCheck.VARIABLE_FORMAT_KEY, "[UPPERCASE]");
-
-        check.execute(argsAndVars, allUpperCase);
-        assertEquals(0, Issues.getCount());
-        Issues.clear();
-
-        check.execute(argsAndVars, allPascalCase);
-        assertTrue(Issues.getCount() > 0);
-        Issues.clear();
-
-        check.execute(argsAndVars, allCamelCase);
-        assertTrue(Issues.getCount() > 0);
-        Issues.clear();
-
-        check.execute(argsAndVars, allLowerCase);
-        assertTrue(Issues.getCount() > 0);
-        Issues.clear();
-    }
-
-    private void testLowerCase(){
-        check.overwriteProperty(VariableConventionCheck.VARIABLE_FORMAT_KEY, "[lowercase]");
-
-        check.execute(argsAndVars, allLowerCase);
-        assertEquals(0, Issues.getCount());
-        Issues.clear();
-
-        check.execute(argsAndVars, allPascalCase);
-        assertTrue(Issues.getCount() > 0);
-        Issues.clear();
-
-        check.execute(argsAndVars, allCamelCase);
-        assertTrue(Issues.getCount() > 0);
-        Issues.clear();
-
-        check.execute(argsAndVars, allUpperCase);
         assertTrue(Issues.getCount() > 0);
         Issues.clear();
     }

@@ -1,10 +1,7 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
-import com.uipath.sonar.plugin.Issues;
-import com.uipath.sonar.plugin.languages.UiPathLanguage;
 import com.uipath.sonar.plugin.uipath.Project;
-import com.uipath.sonar.plugin.uipath.Utils;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import com.uipath.sonar.plugin.uipath.WorkflowArgument;
 import com.uipath.sonar.plugin.uipath.WorkflowArgument.Direction;
@@ -16,7 +13,6 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -71,10 +67,9 @@ public class ArgumentConventionCheck extends AbstractWorkflowCheck {
     @Override
     public void execute(Project project, Workflow workflow) {
 
-
         for(WorkflowArgument arg : workflow.getArguments()) {
             String name = arg.getName();
-            System.out.println("testing " + arg);
+
             switch(arg.getDirection()){
                 case In:
                     Pattern inPattern = Pattern.compile(getInArgFormat());
@@ -96,7 +91,6 @@ public class ArgumentConventionCheck extends AbstractWorkflowCheck {
     }
 
     private void reportIssue(Workflow workflow, WorkflowArgument arg){
-        System.out.println("BADBADBAD");
         String label = arg.getDirection() == Direction.InOut ? "In/Out" : arg.getDirection().toString();
 
         reportIssue(workflow,

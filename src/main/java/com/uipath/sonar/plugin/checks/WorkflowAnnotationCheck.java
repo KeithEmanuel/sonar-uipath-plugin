@@ -1,19 +1,16 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
-import com.uipath.sonar.plugin.Issues;
-import com.uipath.sonar.plugin.uipath.Workflow;
 import com.uipath.sonar.plugin.uipath.Project;
-import org.apache.commons.lang.StringUtils;
-import org.dom4j.*;
+import com.uipath.sonar.plugin.uipath.Workflow;
+import org.dom4j.Node;
+import org.dom4j.XPathException;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @Rule(
     key = "WorkflowAnnotationCheck",

@@ -1,7 +1,5 @@
 package com.uipath.sonar.plugin;
 
-import com.uipath.sonar.plugin.uipath.Project;
-import com.uipath.sonar.plugin.uipath.Workflow;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;

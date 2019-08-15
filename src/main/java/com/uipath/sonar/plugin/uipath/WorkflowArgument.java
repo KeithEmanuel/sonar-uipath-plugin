@@ -34,6 +34,12 @@ public class WorkflowArgument {
         this.direction = direction;
     }
 
+    public WorkflowArgument(String name, String type, Direction direction){
+        this.name = name;
+        this.rawArgType = type;
+        this.direction = direction;
+    }
+
     public static ArrayList<WorkflowArgument> LoadFromWorkflow(Workflow workflow){
 
         LOG.debug("Loading workflow " + workflow.getName());
@@ -47,14 +53,14 @@ public class WorkflowArgument {
         for(Node node : nodes){
             Element element = (Element)node;
 
-            Optional<WorkflowArgument> arg = FromElement(element);
+            Optional<WorkflowArgument> arg = fromElement(element);
             arg.ifPresent(args::add);
         }
 
         return args;
     }
 
-    public static Optional<WorkflowArgument> FromElement(Element element){
+    public static Optional<WorkflowArgument> fromElement(Element element){
         try{
             String rawXml = element.asXML();
             String name = element.attributeValue("Name");
@@ -105,7 +111,7 @@ public class WorkflowArgument {
         return
             other.getName().equals(getName())
             && other.getDirection().equals(getDirection())
-            && other.getRawType().equals(getRawType());
+            && other.getArgType().equals(getArgType());
     }
 
     @Override
@@ -113,11 +119,11 @@ public class WorkflowArgument {
         return String.format("{ name: %s, direction: %s, type: %s }", getName(), getDirection(), getRawType());
     }
 
-    public boolean matches(String name, String rawArgType, Direction direction){
+    /*public boolean matches(String name, String rawArgType, Direction direction){
 
         return
             name.equals(getName())
             && rawArgType.equals(getArgType())
             && direction == getDirection();
-    }
+    }*/
 }

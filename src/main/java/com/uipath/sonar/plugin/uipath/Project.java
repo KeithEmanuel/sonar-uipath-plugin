@@ -3,33 +3,17 @@ package com.uipath.sonar.plugin.uipath;
 import com.google.gson.Gson;
 import com.uipath.sonar.plugin.HasInputFile;
 import com.uipath.sonar.plugin.UiPathSensor;
-import com.uipath.sonar.plugin.checks.ArgumentConventionCheck;
 import org.apache.commons.io.FileUtils;
-import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.issue.NewIssue;
-import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.rule.RuleKey;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Project represents a UiPath project, built from a project.json file.

@@ -1,10 +1,8 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
-import com.uipath.sonar.plugin.Issues;
-import com.uipath.sonar.plugin.uipath.Utils;
-import com.uipath.sonar.plugin.uipath.Workflow;
 import com.uipath.sonar.plugin.uipath.Project;
+import com.uipath.sonar.plugin.uipath.Workflow;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.sonar.api.config.PropertyDefinition;
@@ -18,8 +16,6 @@ import java.util.regex.Pattern;
 
 /**
  * VariableConventionCheck verifies that variables in a workflow follow naming conventions.
- *
- * TODO: Determine naming convention and implement.
  */
 
 @Rule(
@@ -33,7 +29,7 @@ import java.util.regex.Pattern;
 public class VariableConventionCheck extends AbstractWorkflowCheck {
 
     public static final String VARIABLE_FORMAT_KEY = "uipath.check.variableconventioncheck.format";
-    private static final String VARIABLE_FORMAT_DEFAULT_VALUE = "^[a-z][\\w\\d]+$";
+    private static final String VARIABLE_FORMAT_DEFAULT_VALUE = "^[a-z][\\w\\d]*$";
 
     public VariableConventionCheck(){
         super();

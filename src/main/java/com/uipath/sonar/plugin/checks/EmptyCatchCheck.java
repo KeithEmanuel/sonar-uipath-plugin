@@ -1,7 +1,6 @@
 package com.uipath.sonar.plugin.checks;
 
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
-import com.uipath.sonar.plugin.Issues;
 import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import org.dom4j.Element;
@@ -10,7 +9,6 @@ import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 @Rule(
     key = "EmptyCatchCheck",
@@ -33,13 +31,11 @@ public class EmptyCatchCheck extends AbstractWorkflowCheck {
 
             String displayName = tryCatchElement.attributeValue("DisplayName");
 
-            System.out.println(tryCatchElement.selectNodes("//TryCatch.Catches/Catch/ActivityAction").size());
-
-            for(Node activityActionNode : tryCatchElement.selectNodes("//TryCatch.Catches/Catch/ActivityAction")){
+            for(Node activityActionNode : tryCatchElement.selectNodes("//xa:TryCatch.Catches/xa:Catch/xa:ActivityAction")){
                 Element activityActionElement = (Element)activityActionNode;
 
-                String exceptionType = activityActionElement.attributeValue("x:TypeArguments");
-                System.out.println(activityActionElement.elements().size());
+                String exceptionType = activityActionElement.attributeValue("TypeArguments").split(":")[1];
+
                 if(activityActionElement.elements().size() < 2){
                     reportIssue(workflow, "Catch block of '" + displayName + "', catch block for exception type '" + exceptionType +"' should not be empty.");
                 }

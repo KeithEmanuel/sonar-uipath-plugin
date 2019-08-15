@@ -7,7 +7,6 @@ import com.uipath.sonar.plugin.rules.UiPathRulesDefinition;
 import com.uipath.sonar.plugin.settings.UiPathLanguageProperties;
 import org.sonar.api.Plugin;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
 
 /**
  * UiPathPlugin simply defines what classes are used for this plugin.

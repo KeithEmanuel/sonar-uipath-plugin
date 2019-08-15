@@ -2,7 +2,6 @@ package com.uipath.sonar.plugin.uipath;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.regex.Pattern;
 
 public final class Utils {
 

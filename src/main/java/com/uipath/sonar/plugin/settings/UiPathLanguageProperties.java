@@ -1,10 +1,9 @@
 package com.uipath.sonar.plugin.settings;
 
-import com.uipath.sonar.plugin.languages.UiPathLanguage;
 import org.sonar.api.config.PropertyDefinition;
-import org.sonar.api.resources.Qualifiers;
-import java.util.List;
+
 import java.util.Arrays;
+import java.util.List;
 
 public class UiPathLanguageProperties {
 

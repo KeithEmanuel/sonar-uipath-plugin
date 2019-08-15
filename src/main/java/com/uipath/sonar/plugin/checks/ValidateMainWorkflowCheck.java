@@ -1,8 +1,7 @@
 package com.uipath.sonar.plugin.checks;
 
-import com.uipath.sonar.plugin.Issues;
-import com.uipath.sonar.plugin.uipath.Project;
 import com.uipath.sonar.plugin.AbstractProjectCheck;
+import com.uipath.sonar.plugin.uipath.Project;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 

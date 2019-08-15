@@ -1,30 +1,15 @@
 package com.uipath.sonar.plugin.uipath;
 
-import java.io.*;
-import java.net.URI;
-
 import com.google.common.io.Files;
 import com.uipath.sonar.plugin.HasInputFile;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
-import org.dom4j.XPath;
 import org.dom4j.io.SAXReader;
-import org.jaxen.JaxenException;
-import org.jaxen.SimpleNamespaceContext;
-import org.jaxen.dom4j.Dom4jXPath;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.sensor.issue.NewIssue;
-import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.rule.RuleKey;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
-import org.apache.commons.io.FilenameUtils;
-import org.xml.sax.SAXException;
 
+import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**

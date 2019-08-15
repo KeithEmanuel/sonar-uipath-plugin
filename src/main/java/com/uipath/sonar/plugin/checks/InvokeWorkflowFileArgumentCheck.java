@@ -1,9 +1,8 @@
 package com.uipath.sonar.plugin.checks;
 
-import com.uipath.sonar.plugin.Issues;
-import com.uipath.sonar.plugin.uipath.Utils;
 import com.uipath.sonar.plugin.AbstractWorkflowCheck;
 import com.uipath.sonar.plugin.uipath.Project;
+import com.uipath.sonar.plugin.uipath.Utils;
 import com.uipath.sonar.plugin.uipath.Workflow;
 import com.uipath.sonar.plugin.uipath.WorkflowArgument;
 import org.dom4j.Element;
@@ -16,7 +15,7 @@ import org.sonar.check.Rule;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-// TODO, make this check two way (extra or missing args)
+
 @Rule(
     key = "InvokeWorkflowFileArgumentCheck",
     name = "Check 'Invoke Workflow File' arguments match",
@@ -37,53 +36,96 @@ public class InvokeWorkflowFileArgumentCheck extends AbstractWorkflowCheck {
 
     @Override
     public void execute(Project project, Workflow workflow){
-
         List<Node> nodes = workflow.getXamlDocument().selectNodes("//ui:InvokeWorkflowFile");
 
         for(Node node : nodes) {
             Element element = (Element) node;
-            String workflowFilename = element.attributeValue("WorkflowFileName");
 
-            if(Utils.nodeIsCode(workflowFilename)){
-                break;  // This is code, not a literal string.
+            if(Utils.nodeIsCode(element.attributeValue("WorkflowFileName"))){
+                continue;
             }
 
-            Workflow invokedWorkflow = project.getWorkflowWithPath(workflowFilename).orElse(null);
+            InvokeWorkflowFileMetadata iwfMetadata = extractMetadataFromInvokeWorkflowFile(element);
+            executeExtraArgs(project, workflow, iwfMetadata);
+            executeMissingArgs(project, workflow, iwfMetadata);
+        }
+    }
 
-            if(invokedWorkflow != null){
+    private InvokeWorkflowFileMetadata extractMetadataFromInvokeWorkflowFile(Element invokeWorkflowFileElement){
 
-                List<Node> descendantNodes = element.selectNodes("ui:InvokeWorkflowFile.Arguments/*");
+        List<Node> descendantNodes = invokeWorkflowFileElement.selectNodes("ui:InvokeWorkflowFile.Arguments/*");
 
-                for(Node descendantNode : descendantNodes){
+        String activityName = invokeWorkflowFileElement.attributeValue("DisplayName");
+        String filePath = invokeWorkflowFileElement.attributeValue("WorkflowFileName");
 
-                    Element descendant = (Element)descendantNode;
+        ArrayList<WorkflowArgument> arguments = new ArrayList<>();
 
-                    if(ARG_ELEMENT_NAMES.contains(descendant.getName())){
+        for(Node descendantNode : descendantNodes) {
 
-                        String name = descendant.attributeValue("Key");
-                        String type = descendant.attributeValue("TypeArguments");
+            Element descendant = (Element) descendantNode;
 
-                        WorkflowArgument.Direction direction =
-                            descendant.getName().equals("InArgument") ? WorkflowArgument.Direction.In
-                                : descendant.getName().equals("OutArgument") ? WorkflowArgument.Direction.Out
-                                : WorkflowArgument.Direction.InOut;
+            if (ARG_ELEMENT_NAMES.contains(descendant.getName())) {
 
-                        boolean hasMatch = invokedWorkflow.getArguments().stream().anyMatch(a -> a.matches(name, type, direction));
+                String name = descendant.attributeValue("Key");
+                String type = descendant.attributeValue("TypeArguments");
 
-                        if(!hasMatch){
-                            String displayName = element.attributeValue("DisplayName");
+                WorkflowArgument.Direction direction =
+                    descendant.getName().equals("InArgument") ? WorkflowArgument.Direction.In
+                        : descendant.getName().equals("OutArgument") ? WorkflowArgument.Direction.Out
+                        : WorkflowArgument.Direction.InOut;
 
-                            reportIssue(workflow,
-                                "Invalid Invocation of '" + workflowFilename
-                                    + "' in activity '" + displayName + "'. Supplied argument '" + name + "' does not exist.");
-                        }
-                    }
-                }
+                arguments.add(new WorkflowArgument(name, type, direction));
+            }
+        }
+
+        return new InvokeWorkflowFileMetadata(activityName, filePath, arguments);
+    }
+
+    private void executeExtraArgs(Project project, Workflow workflow, InvokeWorkflowFileMetadata iwfMetadata) {
+        Workflow invokedWorkflow = project.getWorkflowWithPath(iwfMetadata.getPath()).get();  // TODO, handle
+
+        for(WorkflowArgument arg : iwfMetadata.getArguments()){
+            if(!invokedWorkflow.getArguments().contains(arg)){
+                reportIssue(workflow,
+                    "Invalid Invocation of '" + iwfMetadata.path
+                        + "' in activity '" + iwfMetadata.getActivityName() + "'. Supplied argument '" + arg.getName() + "' does not exist.");
             }
         }
     }
 
-    public ArrayList<WorkflowArgument> getArgsFromInvokedWorkflow(){
+    private void executeMissingArgs(Project project, Workflow workflow, InvokeWorkflowFileMetadata iwfMetadata) {
+        Workflow invokedWorkflow = project.getWorkflowWithPath(iwfMetadata.path).get();  // TODO, handle
 
+        for(WorkflowArgument arg : invokedWorkflow.getArguments()){
+            if(!iwfMetadata.getArguments().contains(arg)){
+                reportIssue(workflow,
+                    "Invalid Invocation of '" + iwfMetadata.path
+                        + "' in activity '" + iwfMetadata.getActivityName() + "'. Argument '" + arg.getName() + "' was not supplied.");
+            }
+        }
+    }
+
+    private class InvokeWorkflowFileMetadata {
+        private String activityName;
+        private String path;
+        private ArrayList<WorkflowArgument> arguments;
+
+        public InvokeWorkflowFileMetadata(String activityName, String path, ArrayList<WorkflowArgument> arguments){
+            this.activityName = activityName;
+            this.path = path;
+            this.arguments = arguments;
+        }
+
+        public String getActivityName(){
+            return activityName;
+        }
+
+        public String getPath(){
+            return path;
+        }
+
+        public ArrayList<WorkflowArgument> getArguments(){
+            return arguments;
+        }
     }
 }

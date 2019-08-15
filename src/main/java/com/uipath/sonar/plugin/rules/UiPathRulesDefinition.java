@@ -1,15 +1,15 @@
 package com.uipath.sonar.plugin.rules;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.Iterables;
+import com.google.common.io.Resources;
 import com.google.gson.Gson;
 import com.uipath.sonar.plugin.CheckRepository;
 import com.uipath.sonar.plugin.languages.UiPathLanguage;
 import org.apache.commons.lang.StringUtils;
-import com.google.common.annotations.VisibleForTesting;
-import com.google.common.collect.Iterables;
-import com.google.common.io.Resources;
-import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.rules.RuleType;
+import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionAnnotationLoader;
 import org.sonar.api.utils.AnnotationUtils;
