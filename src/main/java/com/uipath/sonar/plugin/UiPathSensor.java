@@ -50,15 +50,23 @@ public class UiPathSensor implements Sensor{
     public void execute(SensorContext context) {
 
         try{
-            LOG.info("Configuring UiPathSensor...");
+            Project project;
 
-            loadSettings(context);
-            configure(context);
+            try{
+                LOG.info("Configuring UiPathSensor...");
 
-            LOG.info("UiPathSensor is running...");
+                loadSettings(context);
+                configure(context);
 
-            File directory = new File(getProjectJson().uri()).getParentFile();
-            Project project = new Project(directory, this, context);
+                LOG.info("UiPathSensor is running...");
+
+                File directory = new File(getProjectJson().uri()).getParentFile();
+                project = new Project(directory, this, context);
+            }
+            catch(Exception ex){
+                LOG.info("No UiPath project found. Skipping...");
+                return;
+            }
 
             LOG.info("Project: " + project.getInputFile().uri().toString());
 

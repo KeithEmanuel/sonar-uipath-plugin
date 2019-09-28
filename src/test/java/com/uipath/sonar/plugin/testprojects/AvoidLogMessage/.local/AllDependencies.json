@@ -993,9 +993,9 @@
     "restore": {
       "projectUniqueName": "AvoidLogMessage",
       "projectName": "AvoidLogMessage",
-      "projectPath": "C:\\Users\\Keith Emanuel\\Documents\\UiPath\\AvoidLogMessage\\.local",
+      "projectPath": "C:\\Users\\Keith Emanuel\\Repositories\\sonar-uipath-plugin\\src\\test\\java\\com\\uipath\\sonar\\plugin\\testprojects\\AvoidLogMessage\\.local",
       "packagesPath": "C:\\Users\\Keith Emanuel\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Keith Emanuel\\Documents\\UiPath\\AvoidLogMessage\\.local"
+      "outputPath": "C:\\Users\\Keith Emanuel\\Repositories\\sonar-uipath-plugin\\src\\test\\java\\com\\uipath\\sonar\\plugin\\testprojects\\AvoidLogMessage\\.local"
     },
     "frameworks": {
       "net461": {
