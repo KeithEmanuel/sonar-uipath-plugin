@@ -31,7 +31,8 @@ public class CheckRepository {
             new WorkflowAnnotationCheck(),
             new AvoidGetPasswordCheck(),
             new AvoidChangingCurrentDirectory(),
-            new EmptyCatchCheck()
+            new EmptyCatchCheck(),
+            new AvoidQueuesCheck()
         );
 
     // Add workflow checks that should NOT be added to the default quality profile here.
