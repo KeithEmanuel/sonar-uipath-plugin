@@ -48,7 +48,7 @@ public class InvokeWorkflowFilePathCheck extends AbstractWorkflowCheck {
                 }
             }
             catch(URISyntaxException e){
-                reportIssue(workflow, "Could not parse path of '\" + workflowFilename + \"'. Ensure that it is valid.");
+                reportIssue(workflow, "Could not parse path of '" + workflowFilename + "'. Ensure that it is valid.");
             }
         }
     }
