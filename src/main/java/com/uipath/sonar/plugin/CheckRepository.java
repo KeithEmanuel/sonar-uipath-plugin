@@ -32,7 +32,10 @@ public class CheckRepository {
             new AvoidGetPasswordCheck(),
             new AvoidChangingCurrentDirectory(),
             new EmptyCatchCheck(),
-            new AvoidQueuesCheck()
+            new AvoidQueuesCheck(),
+            new AvoidBulkAddQueueItemsCheck(),
+            new AvoidGetQueueItemsCheck(),
+            new AvoidGetRobotCredentialCheck()
         );
 
     // Add workflow checks that should NOT be added to the default quality profile here.
