@@ -5,7 +5,7 @@
   <groupId>com.uipath.sonarqube.plugin</groupId>
   <artifactId>sonar-uipath-plugin</artifactId>
   <packaging>sonar-plugin</packaging>
-  <version>0.4.2</version>
+  <version>0.4.3</version>
 
   <name>UiPath Plugin for SonarQube 6.7.x LTS</name>
   <description>SonarQube plugin for analysis of UiPath Studio projects.</description>
