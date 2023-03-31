@@ -1,6 +1,5 @@
 package com.uipath.sonar.plugin;
 
-import com.uipath.sonar.plugin.hooks.DisplayIssuesInScanner;
 import com.uipath.sonar.plugin.languages.UiPathLanguage;
 import com.uipath.sonar.plugin.languages.UiPathQualityProfile;
 import com.uipath.sonar.plugin.rules.UiPathRulesDefinition;
@@ -22,8 +21,7 @@ public class UiPathPlugin implements Plugin {
             UiPathSensor.class,
             UiPathLanguage.class,
             UiPathQualityProfile.class,
-            UiPathRulesDefinition.class,
-            DisplayIssuesInScanner.class);
+            UiPathRulesDefinition.class);
 
         for(PropertyDefinition prop : UiPathLanguageProperties.getProperties()){
             context.addExtension(prop);
