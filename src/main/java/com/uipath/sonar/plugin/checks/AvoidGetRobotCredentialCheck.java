@@ -27,7 +27,13 @@ public class AvoidGetRobotCredentialCheck extends AbstractWorkflowCheck {
         List<Node> nodes = workflow.getXamlDocument().selectNodes("//ui:GetRobotCredential");
 
         if(nodes.size() > 0){
-            reportIssue(workflow, "Avoid using the 'Get Robot Credential' activity.");
+
+        	for(Node node : nodes){
+        		// Allow for vault credential retrieval only
+        		if(node.getStringValue().contains("AssetName=\"vault\"") == false){
+                    reportIssue(workflow, "Avoid using the 'Get Robot Credential' activity.");
+        		}
+        	}
         }
     }
 	
